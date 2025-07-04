@@ -35,3 +35,22 @@ export function validateTask(task: Task): boolean {
   
   return true;
 }
+
+export function toggleTaskComplete(task: Task): Task {
+  return {
+    ...task,
+    completed: !task.completed,
+    updatedAt: new Date()
+  };
+}
+
+export function updateTask(
+  task: Task,
+  updates: Partial<Pick<Task, 'text' | 'priority' | 'category' | 'tags' | 'dueDate'>>
+): Task {
+  return {
+    ...task,
+    ...updates,
+    updatedAt: new Date()
+  };
+}

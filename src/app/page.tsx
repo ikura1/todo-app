@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { TaskForm } from '@/components/TaskForm';
-import { createTask } from '@/lib/task';
+import { TaskList } from '@/components/TaskList';
+import { createTask, toggleTaskComplete, updateTask } from '@/lib/task';
 import { Task } from '@/types/task';
 
 export default function Home() {
@@ -17,6 +18,26 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleToggleComplete = (taskId: string) => {
+    setTasks(prev => 
+      prev.map(task => 
+        task.id === taskId ? toggleTaskComplete(task) : task
+      )
+    );
+  };
+
+  const handleDelete = (taskId: string) => {
+    setTasks(prev => prev.filter(task => task.id !== taskId));
+  };
+
+  const handleEdit = (taskId: string, newText: string) => {
+    setTasks(prev => 
+      prev.map(task => 
+        task.id === taskId ? updateTask(task, { text: newText }) : task
+      )
+    );
   };
 
   return (
@@ -35,38 +56,12 @@ export default function Home() {
           <TaskForm onSubmit={handleSubmit} isLoading={isLoading} />
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            タスク一覧 ({tasks.length})
-          </h2>
-          {tasks.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">
-              まだタスクがありません。上のフォームから追加してください。
-            </p>
-          ) : (
-            <ul className="space-y-3">
-              {tasks.map((task) => (
-                <li
-                  key={task.id}
-                  className="flex items-center gap-3 p-3 border border-gray-200 rounded-md hover:bg-gray-50"
-                >
-                  <input
-                    type="checkbox"
-                    checked={task.completed}
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                    readOnly
-                  />
-                  <span className={`flex-1 ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
-                    {task.text}
-                  </span>
-                  <span className="text-xs text-gray-500">
-                    {task.priority}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <TaskList 
+          tasks={tasks}
+          onToggleComplete={handleToggleComplete}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+        />
       </div>
     </div>
   );

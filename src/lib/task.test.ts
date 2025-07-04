@@ -1,10 +1,9 @@
-import { createTask, validateTask } from './task';
+import { createTask, validateTask, toggleTaskComplete, updateTask } from './task';
 import { Task } from '@/types/task';
 
 describe('Task Model', () => {
   describe('createTask', () => {
     it('should create a task with required fields', () => {
-      // Red: 失敗するテストを書く
       const taskText = 'テストタスク';
       const task = createTask(taskText);
 
@@ -80,6 +79,119 @@ describe('Task Model', () => {
       } as unknown as Task;
 
       expect(validateTask(invalidTask)).toBe(false);
+    });
+  });
+
+  describe('toggleTaskComplete', () => {
+    it('should toggle task from incomplete to complete', async () => {
+      const originalTask: Task = {
+        id: '1',
+        text: 'テストタスク',
+        completed: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        priority: 'medium'
+      };
+
+      // 時間差を確保するため少し待つ
+      await new Promise(resolve => setTimeout(resolve, 10));
+      const updatedTask = toggleTaskComplete(originalTask);
+
+      expect(updatedTask.completed).toBe(true);
+      expect(updatedTask.updatedAt.getTime()).toBeGreaterThan(originalTask.updatedAt.getTime());
+      expect(updatedTask.id).toBe(originalTask.id);
+      expect(updatedTask.text).toBe(originalTask.text);
+    });
+
+    it('should toggle task from complete to incomplete', async () => {
+      const originalTask: Task = {
+        id: '1',
+        text: 'テストタスク',
+        completed: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        priority: 'medium'
+      };
+
+      // 時間差を確保するため少し待つ
+      await new Promise(resolve => setTimeout(resolve, 10));
+      const updatedTask = toggleTaskComplete(originalTask);
+
+      expect(updatedTask.completed).toBe(false);
+      expect(updatedTask.updatedAt.getTime()).toBeGreaterThan(originalTask.updatedAt.getTime());
+    });
+
+    it('should not mutate original task', () => {
+      const originalTask: Task = {
+        id: '1',
+        text: 'テストタスク',
+        completed: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        priority: 'medium'
+      };
+
+      const updatedTask = toggleTaskComplete(originalTask);
+
+      expect(originalTask.completed).toBe(false);
+      expect(updatedTask).not.toBe(originalTask);
+    });
+  });
+
+  describe('updateTask', () => {
+    it('should update task text', async () => {
+      const originalTask: Task = {
+        id: '1',
+        text: '元のタスク',
+        completed: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        priority: 'medium'
+      };
+
+      // 時間差を確保するため少し待つ
+      await new Promise(resolve => setTimeout(resolve, 10));
+      const newText = '更新されたタスク';
+      const updatedTask = updateTask(originalTask, { text: newText });
+
+      expect(updatedTask.text).toBe(newText);
+      expect(updatedTask.updatedAt.getTime()).toBeGreaterThan(originalTask.updatedAt.getTime());
+      expect(updatedTask.id).toBe(originalTask.id);
+    });
+
+    it('should update task priority', async () => {
+      const originalTask: Task = {
+        id: '1',
+        text: 'テストタスク',
+        completed: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        priority: 'medium'
+      };
+
+      // 時間差を確保するため少し待つ
+      await new Promise(resolve => setTimeout(resolve, 10));
+      const newPriority = 'high';
+      const updatedTask = updateTask(originalTask, { priority: newPriority });
+
+      expect(updatedTask.priority).toBe(newPriority);
+      expect(updatedTask.updatedAt.getTime()).toBeGreaterThan(originalTask.updatedAt.getTime());
+    });
+
+    it('should not mutate original task', () => {
+      const originalTask: Task = {
+        id: '1',
+        text: 'テストタスク',
+        completed: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        priority: 'medium'
+      };
+
+      const updatedTask = updateTask(originalTask, { text: '新しいテキスト' });
+
+      expect(originalTask.text).toBe('テストタスク');
+      expect(updatedTask).not.toBe(originalTask);
     });
   });
 });
