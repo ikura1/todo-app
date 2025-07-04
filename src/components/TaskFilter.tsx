@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { TaskFilter as TaskFilterType } from '@/lib/taskFilter';
 
 interface TaskFilterProps {
@@ -32,8 +33,20 @@ export function TaskFilter({ filter, onFilterChange, taskCounts }: TaskFilterPro
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">フィルター</h3>
+    <motion.div 
+      className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 p-6 mb-6"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.1 }}
+    >
+      <motion.h3 
+        className="text-lg font-semibold text-gray-900 mb-4"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2, duration: 0.3 }}
+      >
+        フィルター
+      </motion.h3>
       
       {/* ステータスフィルター */}
       <div className="mb-4">
@@ -45,8 +58,8 @@ export function TaskFilter({ filter, onFilterChange, taskCounts }: TaskFilterPro
             { key: 'all', label: `すべて (${taskCounts.all})` },
             { key: 'active', label: `未完了 (${taskCounts.active})` },
             { key: 'completed', label: `完了済み (${taskCounts.completed})` },
-          ].map(({ key, label }) => (
-            <button
+          ].map(({ key, label }, index) => (
+            <motion.button
               key={key}
               onClick={() => handleStatusChange(key as 'all' | 'active' | 'completed')}
               className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
@@ -54,9 +67,14 @@ export function TaskFilter({ filter, onFilterChange, taskCounts }: TaskFilterPro
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 + index * 0.1, duration: 0.2 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               {label}
-            </button>
+            </motion.button>
           ))}
         </div>
       </div>
@@ -91,6 +109,6 @@ export function TaskFilter({ filter, onFilterChange, taskCounts }: TaskFilterPro
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
-    </div>
+    </motion.div>
   );
 }
