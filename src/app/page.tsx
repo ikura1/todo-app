@@ -1,14 +1,43 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { TaskForm } from '@/components/TaskForm';
 import { TaskList } from '@/components/TaskList';
+import { TaskFilter } from '@/components/TaskFilter';
 import { createTask, toggleTaskComplete, updateTask } from '@/lib/task';
+import { saveTasksToStorage, loadTasksFromStorage } from '@/lib/storage';
+import { filterTasks, TaskFilter as TaskFilterType } from '@/lib/taskFilter';
 import { Task } from '@/types/task';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [filter, setFilter] = useState<TaskFilterType>({ status: 'all' });
+
+  // 初期化時にlocalStorageからタスクを読み込み
+  useEffect(() => {
+    const loadedTasks = loadTasksFromStorage();
+    setTasks(loadedTasks);
+  }, []);
+
+  // タスクが変更されるたびにlocalStorageに保存
+  useEffect(() => {
+    saveTasksToStorage(tasks);
+  }, [tasks]);
+
+  // フィルタリングされたタスク
+  const filteredTasks = useMemo(() => {
+    return filterTasks(tasks, filter);
+  }, [tasks, filter]);
+
+  // タスク数の統計
+  const taskCounts = useMemo(() => {
+    return {
+      all: tasks.length,
+      active: tasks.filter(task => !task.completed).length,
+      completed: tasks.filter(task => task.completed).length,
+    };
+  }, [tasks]);
 
   const handleSubmit = async (text: string) => {
     setIsLoading(true);
@@ -56,8 +85,14 @@ export default function Home() {
           <TaskForm onSubmit={handleSubmit} isLoading={isLoading} />
         </div>
 
+        <TaskFilter 
+          filter={filter}
+          onFilterChange={setFilter}
+          taskCounts={taskCounts}
+        />
+
         <TaskList 
-          tasks={tasks}
+          tasks={filteredTasks}
           onToggleComplete={handleToggleComplete}
           onDelete={handleDelete}
           onEdit={handleEdit}

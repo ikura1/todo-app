@@ -1,0 +1,34 @@
+import { Task } from '@/types/task';
+
+export const STORAGE_KEY = 'todo-app-tasks';
+
+export function saveTasksToStorage(tasks: Task[]): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+  } catch (error) {
+    console.error('Failed to save tasks to localStorage:', error);
+  }
+}
+
+export function loadTasksFromStorage(): Task[] {
+  try {
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    
+    if (!storedData) {
+      return [];
+    }
+
+    const tasks = JSON.parse(storedData) as Task[];
+    
+    // Date オブジェクトを復元
+    return tasks.map(task => ({
+      ...task,
+      createdAt: new Date(task.createdAt),
+      updatedAt: new Date(task.updatedAt),
+      dueDate: task.dueDate ? new Date(task.dueDate) : undefined
+    }));
+  } catch (error) {
+    console.error('Failed to load tasks from localStorage:', error);
+    return [];
+  }
+}
