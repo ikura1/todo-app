@@ -14,16 +14,16 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: TaskListProps) {
   if (tasks.length === 0) {
     return (
       <motion.div 
-        className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 p-6"
+        className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 dark:border-gray-700/20 p-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
           タスク一覧 (0)
         </h2>
         <motion.p 
-          className="text-gray-500 text-center py-8"
+          className="text-gray-500 dark:text-gray-400 text-center py-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.3 }}
@@ -36,13 +36,13 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: TaskListProps) {
 
   return (
     <motion.div 
-      className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 p-6"
+      className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 dark:border-gray-700/20 p-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
       <motion.h2 
-        className="text-xl font-semibold text-gray-900 mb-4"
+        className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.1, duration: 0.3 }}
@@ -54,7 +54,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: TaskListProps) {
           {tasks.map((task, index) => (
             <motion.li
               key={task.id}
-              className="flex items-center gap-3 p-3 border border-gray-200 rounded-md hover:bg-gray-50"
+              className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ 
@@ -86,7 +86,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: TaskListProps) {
                 whileTap={{ scale: 0.9 }}
               />
               <motion.span 
-                className={`flex-1 ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}
+                className={`flex-1 ${task.completed ? 'line-through text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-gray-100'}`}
                 animate={{
                   opacity: task.completed ? 0.6 : 1,
                   scale: task.completed ? 0.98 : 1,
@@ -96,7 +96,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: TaskListProps) {
                 {task.text}
               </motion.span>
               <motion.span 
-                className="text-xs text-gray-500"
+                className="text-xs text-gray-500 dark:text-gray-400"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.2 }}
@@ -105,7 +105,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: TaskListProps) {
               </motion.span>
               <motion.button
                 onClick={() => onDelete(task.id)}
-                className="px-3 py-1 text-red-600 hover:bg-red-50 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="px-3 py-1 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
                 whileHover={{ 
                   scale: 1.05,
                   backgroundColor: "#fef2f2"

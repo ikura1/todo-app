@@ -36,7 +36,7 @@ export function TaskForm({ onSubmit, isLoading = false }: TaskFormProps) {
         onChange={(e) => setText(e.target.value)}
         placeholder="新しいタスクを入力..."
         disabled={isLoading}
-        className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+        className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
         whileFocus={{ 
           scale: 1.02,
           borderColor: "#3b82f6",
@@ -47,7 +47,7 @@ export function TaskForm({ onSubmit, isLoading = false }: TaskFormProps) {
       <motion.button
         type="submit"
         disabled={isLoading || text.trim() === ''}
-        className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-400"
         whileHover={{ 
           scale: 1.05,
           backgroundColor: "#2563eb",

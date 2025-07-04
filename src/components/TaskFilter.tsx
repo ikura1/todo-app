@@ -34,13 +34,13 @@ export function TaskFilter({ filter, onFilterChange, taskCounts }: TaskFilterPro
 
   return (
     <motion.div 
-      className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 p-6 mb-6"
+      className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 dark:border-gray-700/20 p-6 mb-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.1 }}
     >
       <motion.h3 
-        className="text-lg font-semibold text-gray-900 mb-4"
+        className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2, duration: 0.3 }}
@@ -50,7 +50,7 @@ export function TaskFilter({ filter, onFilterChange, taskCounts }: TaskFilterPro
       
       {/* ステータスフィルター */}
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           ステータス
         </label>
         <div className="flex flex-wrap gap-2">
@@ -64,8 +64,8 @@ export function TaskFilter({ filter, onFilterChange, taskCounts }: TaskFilterPro
               onClick={() => handleStatusChange(key as 'all' | 'active' | 'completed')}
               className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                 filter.status === key
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-blue-500 text-white dark:bg-blue-600'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
               }`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -81,13 +81,13 @@ export function TaskFilter({ filter, onFilterChange, taskCounts }: TaskFilterPro
 
       {/* 優先度フィルター */}
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           優先度
         </label>
         <select
           value={filter.priority || 'all'}
           onChange={(e) => handlePriorityChange(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
         >
           <option value="all">すべて</option>
           <option value="high">高</option>
@@ -98,7 +98,7 @@ export function TaskFilter({ filter, onFilterChange, taskCounts }: TaskFilterPro
 
       {/* 検索フィルター */}
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           検索
         </label>
         <input
@@ -106,7 +106,7 @@ export function TaskFilter({ filter, onFilterChange, taskCounts }: TaskFilterPro
           value={filter.searchText || ''}
           onChange={(e) => handleSearchChange(e.target.value)}
           placeholder="タスクを検索..."
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
         />
       </div>
     </motion.div>
