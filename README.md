@@ -24,6 +24,7 @@
 - **アニメーション**: Framer Motion
 - **ドラッグ&ドロップ**: @dnd-kit
 - **テスト**: Vitest + React Testing Library
+- **Linter/Formatter**: Biome
 - **開発手法**: Test-Driven Development (TDD)
 
 ## 💻 開発環境のセットアップ
@@ -49,14 +50,20 @@ pnpm dev
 ### 利用可能なコマンド
 
 ```bash
-pnpm dev          # 開発サーバーの起動
-pnpm build        # プロダクションビルド
-pnpm start        # プロダクションサーバーの起動
-pnpm lint         # ESLintの実行
-pnpm test         # テストの実行
-pnpm test:watch   # テストのウォッチモード
+pnpm dev           # 開発サーバーの起動
+pnpm build         # プロダクションビルド
+pnpm start         # プロダクションサーバーの起動
+pnpm lint          # Biome lintの実行
+pnpm lint:fix      # Biome lintの実行＋自動修正
+pnpm format        # Biome formatの実行
+pnpm format:fix    # Biome formatの実行＋自動修正
+pnpm check         # Biome全体チェック
+pnpm check:fix     # Biome全体チェック＋自動修正
+pnpm test          # テストの実行
+pnpm test:watch    # テストのウォッチモード
 pnpm test:coverage # カバレッジ付きテスト
-pnpm typecheck    # TypeScriptの型チェック
+pnpm test:ui       # テストUIの起動
+pnpm typecheck     # TypeScriptの型チェック
 ```
 
 🤖 Generated with [Claude Code](https://claude.ai/code)

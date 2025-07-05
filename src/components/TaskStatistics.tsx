@@ -1,8 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Task } from '@/types/task';
 import { useTaskStatistics } from '@/hooks/useTaskStatistics';
+import type { Task } from '@/types/task';
 
 interface TaskStatisticsProps {
   tasks: Task[];
@@ -11,13 +11,13 @@ interface TaskStatisticsProps {
 export function TaskStatistics({ tasks }: TaskStatisticsProps) {
   const stats = useTaskStatistics(tasks);
 
-  const StatCard = ({ 
-    title, 
-    value, 
-    subtitle, 
-    icon, 
+  const StatCard = ({
+    title,
+    value,
+    subtitle,
+    icon,
     color = 'blue',
-    delay = 0 
+    delay = 0,
   }: {
     title: string;
     value: string | number;
@@ -48,7 +48,7 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
           </div>
         </div>
         <div>
-          <motion.h3 
+          <motion.h3
             className="text-2xl font-bold text-gray-900 dark:text-gray-100"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
@@ -56,25 +56,19 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
           >
             {value}
           </motion.h3>
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mt-1">
-            {title}
-          </p>
-          {subtitle && (
-            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-              {subtitle}
-            </p>
-          )}
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mt-1">{title}</p>
+          {subtitle && <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">{subtitle}</p>}
         </div>
       </motion.div>
     );
   };
 
-  const ProgressBar = ({ 
-    label, 
-    current, 
-    total, 
+  const ProgressBar = ({
+    label,
+    current,
+    total,
     color = 'blue',
-    delay = 0 
+    delay = 0,
   }: {
     label: string;
     current: number;
@@ -83,7 +77,7 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
     delay?: number;
   }) => {
     const percentage = total > 0 ? (current / total) * 100 : 0;
-    
+
     const colorClasses = {
       blue: 'bg-blue-500',
       green: 'bg-green-500',
@@ -110,7 +104,7 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
             className={`h-2 rounded-full ${colorClasses[color]}`}
             initial={{ width: 0 }}
             animate={{ width: `${percentage}%` }}
-            transition={{ duration: 0.8, delay: delay + 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: delay + 0.2, ease: 'easeOut' }}
           />
         </div>
       </motion.div>
@@ -140,43 +134,63 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
           value={stats.totalTasks}
           icon={
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+              />
             </svg>
           }
           color="blue"
           delay={0}
         />
-        
+
         <StatCard
           title="完了済み"
           value={stats.completedTasks}
           icon={
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
           }
           color="green"
           delay={0.1}
         />
-        
+
         <StatCard
           title="未完了"
           value={stats.activeTasks}
           icon={
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
           }
           color="orange"
           delay={0.2}
         />
-        
+
         <StatCard
           title="完了率"
           value={`${stats.completionRate.toFixed(1)}%`}
           icon={
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
             </svg>
           }
           color="purple"
@@ -200,7 +214,7 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
               className="text-2xl font-bold text-blue-600 dark:text-blue-400"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 0.6, duration: 0.3, type: "spring" }}
+              transition={{ delay: 0.6, duration: 0.3, type: 'spring' }}
             >
               {stats.tasksCreatedToday}
             </motion.div>
@@ -211,7 +225,7 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
               className="text-2xl font-bold text-green-600 dark:text-green-400"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 0.7, duration: 0.3, type: "spring" }}
+              transition={{ delay: 0.7, duration: 0.3, type: 'spring' }}
             >
               {stats.tasksCompletedToday}
             </motion.div>
@@ -222,7 +236,7 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
               className="text-2xl font-bold text-purple-600 dark:text-purple-400"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 0.8, duration: 0.3, type: "spring" }}
+              transition={{ delay: 0.8, duration: 0.3, type: 'spring' }}
             >
               {stats.averageTasksPerDay.toFixed(1)}
             </motion.div>
@@ -271,16 +285,14 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.6 }}
       >
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          🔥 連続記録
-        </h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">🔥 連続記録</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="text-center">
             <motion.div
               className="text-3xl font-bold text-orange-600 dark:text-orange-400"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 0.8, duration: 0.3, type: "spring" }}
+              transition={{ delay: 0.8, duration: 0.3, type: 'spring' }}
             >
               {stats.currentStreak}
             </motion.div>
@@ -291,7 +303,7 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
               className="text-3xl font-bold text-red-600 dark:text-red-400"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 0.9, duration: 0.3, type: "spring" }}
+              transition={{ delay: 0.9, duration: 0.3, type: 'spring' }}
             >
               {stats.longestStreak}
             </motion.div>
@@ -320,12 +332,8 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.8 + index * 0.1, duration: 0.2 }}
               >
-                <span className="font-medium text-gray-900 dark:text-gray-100">
-                  📂 {category}
-                </span>
-                <span className="text-blue-600 dark:text-blue-400 font-bold">
-                  {count}
-                </span>
+                <span className="font-medium text-gray-900 dark:text-gray-100">📂 {category}</span>
+                <span className="text-blue-600 dark:text-blue-400 font-bold">{count}</span>
               </motion.div>
             ))}
           </div>
@@ -339,16 +347,14 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.8 }}
       >
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          ⏰ 期限管理
-        </h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">⏰ 期限管理</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center">
             <motion.div
               className="text-2xl font-bold text-red-600 dark:text-red-400"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 0.9, duration: 0.3, type: "spring" }}
+              transition={{ delay: 0.9, duration: 0.3, type: 'spring' }}
             >
               {stats.overdueTasksCount}
             </motion.div>
@@ -359,7 +365,7 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
               className="text-2xl font-bold text-orange-600 dark:text-orange-400"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 1.0, duration: 0.3, type: "spring" }}
+              transition={{ delay: 1.0, duration: 0.3, type: 'spring' }}
             >
               {stats.dueTodayCount}
             </motion.div>
@@ -370,7 +376,7 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
               className="text-2xl font-bold text-yellow-600 dark:text-yellow-400"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 1.1, duration: 0.3, type: "spring" }}
+              transition={{ delay: 1.1, duration: 0.3, type: 'spring' }}
             >
               {stats.dueThisWeekCount}
             </motion.div>
@@ -381,7 +387,7 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
               className="text-2xl font-bold text-gray-600 dark:text-gray-400"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 1.2, duration: 0.3, type: "spring" }}
+              transition={{ delay: 1.2, duration: 0.3, type: 'spring' }}
             >
               {stats.tasksWithoutDueDate}
             </motion.div>

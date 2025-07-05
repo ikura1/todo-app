@@ -5,12 +5,10 @@ import { useDarkMode } from '@/hooks/useDarkMode';
 
 export function DarkModeToggle() {
   const { isDarkMode, toggleDarkMode, isInitialized } = useDarkMode();
-  
+
   // 初期化完了まで何も表示しない（ハイドレーション問題回避）
   if (!isInitialized) {
-    return (
-      <div className="h-8 w-14 bg-gray-200 rounded-full animate-pulse"></div>
-    );
+    return <div className="h-8 w-14 bg-gray-200 rounded-full animate-pulse"></div>;
   }
 
   return (
@@ -19,10 +17,7 @@ export function DarkModeToggle() {
       className={`
         relative inline-flex h-8 w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent 
         transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 
-        ${isDarkMode 
-          ? 'bg-blue-600 focus:ring-blue-500' 
-          : 'bg-gray-200 focus:ring-blue-500'
-        }
+        ${isDarkMode ? 'bg-blue-600 focus:ring-blue-500' : 'bg-gray-200 focus:ring-blue-500'}
       `}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
@@ -40,9 +35,9 @@ export function DarkModeToggle() {
           x: isDarkMode ? 24 : 0,
         }}
         transition={{
-          type: "spring",
+          type: 'spring',
           stiffness: 500,
-          damping: 30
+          damping: 30,
         }}
       >
         <motion.span

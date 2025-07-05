@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { usePWA } from '@/hooks/usePWA';
 
 export function OfflineIndicator() {
@@ -23,16 +23,11 @@ export function OfflineIndicator() {
             }}
             transition={{
               duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut"
+              repeat: Number.POSITIVE_INFINITY,
+              ease: 'easeInOut',
             }}
           >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -40,9 +35,7 @@ export function OfflineIndicator() {
                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.854-.833-2.598 0L4.268 18.5c-.77.833.192 2.5 1.732 2.5z"
               />
             </svg>
-            <span className="text-sm font-medium">
-              オフライン中 - 一部の機能が制限されています
-            </span>
+            <span className="text-sm font-medium">オフライン中 - 一部の機能が制限されています</span>
           </motion.div>
         </motion.div>
       )}

@@ -1,4 +1,4 @@
-import { Task } from '@/types/task';
+import type { Task } from '@/types/task';
 
 export function createTask(
   text: string,
@@ -10,7 +10,7 @@ export function createTask(
   } = {}
 ): Task {
   const now = new Date();
-  
+
   return {
     id: Math.random().toString(36).substring(2, 9),
     text,
@@ -20,7 +20,7 @@ export function createTask(
     priority: options.priority || 'medium',
     category: options.category,
     tags: options.tags,
-    dueDate: options.dueDate
+    dueDate: options.dueDate,
   };
 }
 
@@ -28,11 +28,11 @@ export function validateTask(task: Task): boolean {
   if (!task.text || task.text.trim() === '') {
     return false;
   }
-  
+
   if (!['low', 'medium', 'high'].includes(task.priority)) {
     return false;
   }
-  
+
   return true;
 }
 
@@ -40,7 +40,7 @@ export function toggleTaskComplete(task: Task): Task {
   return {
     ...task,
     completed: !task.completed,
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
 }
 
@@ -51,6 +51,6 @@ export function updateTask(
   return {
     ...task,
     ...updates,
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
 }

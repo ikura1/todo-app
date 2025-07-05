@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
-import { createTask, validateTask, toggleTaskComplete, updateTask } from './task';
-import { Task } from '@/types/task';
+import { describe, expect, it } from 'vitest';
+import type { Task } from '@/types/task';
+import { createTask, toggleTaskComplete, updateTask, validateTask } from './task';
 
 describe('Task Model', () => {
   describe('createTask', () => {
@@ -50,7 +50,7 @@ describe('Task Model', () => {
         completed: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        priority: 'medium'
+        priority: 'medium',
       };
 
       expect(validateTask(validTask)).toBe(true);
@@ -63,7 +63,7 @@ describe('Task Model', () => {
         completed: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        priority: 'medium'
+        priority: 'medium',
       };
 
       expect(validateTask(invalidTask)).toBe(false);
@@ -76,7 +76,7 @@ describe('Task Model', () => {
         completed: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        priority: 'invalid'
+        priority: 'invalid',
       } as unknown as Task;
 
       expect(validateTask(invalidTask)).toBe(false);
@@ -91,11 +91,11 @@ describe('Task Model', () => {
         completed: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        priority: 'medium'
+        priority: 'medium',
       };
 
       // 時間差を確保するため少し待つ
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
       const updatedTask = toggleTaskComplete(originalTask);
 
       expect(updatedTask.completed).toBe(true);
@@ -111,11 +111,11 @@ describe('Task Model', () => {
         completed: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        priority: 'medium'
+        priority: 'medium',
       };
 
       // 時間差を確保するため少し待つ
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
       const updatedTask = toggleTaskComplete(originalTask);
 
       expect(updatedTask.completed).toBe(false);
@@ -129,7 +129,7 @@ describe('Task Model', () => {
         completed: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        priority: 'medium'
+        priority: 'medium',
       };
 
       const updatedTask = toggleTaskComplete(originalTask);
@@ -147,11 +147,11 @@ describe('Task Model', () => {
         completed: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        priority: 'medium'
+        priority: 'medium',
       };
 
       // 時間差を確保するため少し待つ
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
       const newText = '更新されたタスク';
       const updatedTask = updateTask(originalTask, { text: newText });
 
@@ -167,11 +167,11 @@ describe('Task Model', () => {
         completed: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        priority: 'medium'
+        priority: 'medium',
       };
 
       // 時間差を確保するため少し待つ
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
       const newPriority = 'high';
       const updatedTask = updateTask(originalTask, { priority: newPriority });
 
@@ -186,7 +186,7 @@ describe('Task Model', () => {
         completed: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        priority: 'medium'
+        priority: 'medium',
       };
 
       const updatedTask = updateTask(originalTask, { text: '新しいテキスト' });

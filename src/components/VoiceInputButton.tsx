@@ -1,8 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { useEffect } from 'react';
+import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 
 interface VoiceInputButtonProps {
   onTranscript: (text: string) => void;
@@ -47,23 +47,28 @@ export function VoiceInputButton({ onTranscript, disabled = false }: VoiceInputB
         disabled={disabled}
         className={`
           relative p-3 rounded-full border-2 transition-all duration-200 flex items-center justify-center
-          ${isListening 
-            ? 'bg-red-500 border-red-500 text-white shadow-lg' 
-            : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-500 dark:hover:border-blue-400'
+          ${
+            isListening
+              ? 'bg-red-500 border-red-500 text-white shadow-lg'
+              : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-500 dark:hover:border-blue-400'
           }
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md'}
         `}
         whileHover={!disabled ? { scale: 1.05 } : {}}
         whileTap={!disabled ? { scale: 0.95 } : {}}
         transition={{ duration: 0.1 }}
-        animate={isListening ? {
-          scale: [1, 1.1, 1],
-          transition: {
-            repeat: Infinity,
-            duration: 1.5,
-            ease: "easeInOut"
-          }
-        } : {}}
+        animate={
+          isListening
+            ? {
+                scale: [1, 1.1, 1],
+                transition: {
+                  repeat: Number.POSITIVE_INFINITY,
+                  duration: 1.5,
+                  ease: 'easeInOut',
+                },
+              }
+            : {}
+        }
         aria-label={isListening ? '音声入力を停止' : '音声入力を開始'}
       >
         {isListening ? (
@@ -99,9 +104,9 @@ export function VoiceInputButton({ onTranscript, disabled = false }: VoiceInputB
               opacity: [0.7, 0.3, 0.7],
             }}
             transition={{
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               duration: 1.5,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
           />
         )}

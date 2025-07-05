@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface UseDarkModeReturn {
   isDarkMode: boolean;
@@ -12,22 +12,22 @@ export function useDarkMode(): UseDarkModeReturn {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     // 初期化: localStorageまたはシステム設定から値を取得
     const storedTheme = localStorage.getItem('theme');
     let initialDarkMode = false;
-    
+
     if (storedTheme) {
       initialDarkMode = storedTheme === 'dark';
     } else {
       // システム設定を確認
       initialDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
-    
+
     setIsDarkMode(initialDarkMode);
     updateDocumentClass(initialDarkMode);
     setIsInitialized(true);
-    
+
     // メディアクエリの変更を監視
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = (e: MediaQueryListEvent) => {
@@ -38,17 +38,17 @@ export function useDarkMode(): UseDarkModeReturn {
         updateDocumentClass(e.matches);
       }
     };
-    
+
     mediaQuery.addEventListener('change', handleChange);
-    
+
     return () => {
       mediaQuery.removeEventListener('change', handleChange);
     };
-  }, []);
+  }, [updateDocumentClass]);
 
   const updateDocumentClass = (isDark: boolean) => {
     if (typeof document === 'undefined') return;
-    
+
     if (isDark) {
       document.documentElement.classList.add('dark');
     } else {
@@ -59,7 +59,7 @@ export function useDarkMode(): UseDarkModeReturn {
   const toggleDarkMode = () => {
     const newDarkMode = !isDarkMode;
     setIsDarkMode(newDarkMode);
-    
+
     if (typeof window !== 'undefined') {
       const theme = newDarkMode ? 'dark' : 'light';
       localStorage.setItem('theme', theme);

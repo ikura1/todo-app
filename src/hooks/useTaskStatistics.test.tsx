@@ -1,14 +1,19 @@
-import { describe, test, expect } from 'vitest';
 import { renderHook } from '@testing-library/react';
-import { useTaskStatistics } from './useTaskStatistics';
-import { Task } from '@/types/task';
+import { describe, expect, test } from 'vitest';
 import { createTask } from '@/lib/task';
+import type { Task } from '@/types/task';
+import { useTaskStatistics } from './useTaskStatistics';
 
 describe('useTaskStatistics', () => {
-  const createTaskWithDate = (text: string, completed: boolean, priority: 'high' | 'medium' | 'low', daysAgo: number = 0): Task => {
+  const createTaskWithDate = (
+    text: string,
+    completed: boolean,
+    priority: 'high' | 'medium' | 'low',
+    daysAgo: number = 0
+  ): Task => {
     const date = new Date();
     date.setDate(date.getDate() - daysAgo);
-    
+
     return {
       ...createTask(text, { priority }),
       completed,
@@ -191,9 +196,7 @@ describe('useTaskStatistics', () => {
   });
 
   test('should handle single day completion', () => {
-    const tasks: Task[] = [
-      createTaskWithDate('Single completed task', true, 'high'),
-    ];
+    const tasks: Task[] = [createTaskWithDate('Single completed task', true, 'high')];
 
     const { result } = renderHook(() => useTaskStatistics(tasks));
 
@@ -202,9 +205,7 @@ describe('useTaskStatistics', () => {
   });
 
   test('should update statistics when tasks change', () => {
-    let tasks: Task[] = [
-      createTaskWithDate('Task 1', false, 'high'),
-    ];
+    let tasks: Task[] = [createTaskWithDate('Task 1', false, 'high')];
 
     const { result, rerender } = renderHook(() => useTaskStatistics(tasks));
 
@@ -212,10 +213,7 @@ describe('useTaskStatistics', () => {
     expect(result.current.completedTasks).toBe(0);
 
     // Add a completed task
-    tasks = [
-      ...tasks,
-      createTaskWithDate('Task 2', true, 'medium'),
-    ];
+    tasks = [...tasks, createTaskWithDate('Task 2', true, 'medium')];
 
     rerender();
 

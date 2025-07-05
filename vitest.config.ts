@@ -1,5 +1,5 @@
-import { defineConfig } from 'vitest/config'
-import { resolve } from 'path'
+import { resolve } from 'node:path';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
@@ -17,17 +17,17 @@ export default defineConfig({
         '**/*.config.*',
         '**/coverage/**',
         'out/**',
-        '.next/**'
-      ]
+        '.next/**',
+      ],
     },
     // Add React DOM environment compatibility
     env: {
-      NODE_ENV: 'test'
-    }
+      NODE_ENV: 'test',
+    },
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src')
-    }
-  }
-})
+      '@': resolve(__dirname, './src'),
+    },
+  },
+});

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface UseSpeechRecognitionReturn {
   isListening: boolean;
@@ -52,7 +52,8 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   // ブラウザサポートの確認
-  const isSupported = typeof window !== 'undefined' && 
+  const isSupported =
+    typeof window !== 'undefined' &&
     ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
 
   // Speech Recognition の初期化
@@ -83,7 +84,6 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
     };
 
     const handleError = (event: SpeechRecognitionErrorEvent) => {
-      console.error('Speech recognition error:', event.error);
       setError(event.error);
       setIsListening(false);
     };
@@ -121,8 +121,7 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
       setError(null);
       setTranscript('');
       recognitionRef.current.start();
-    } catch (error) {
-      console.error('Failed to start speech recognition:', error);
+    } catch (_error) {
       setError('音声認識の開始に失敗しました');
     }
   }, [isListening]);
@@ -132,8 +131,7 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
 
     try {
       recognitionRef.current.stop();
-    } catch (error) {
-      console.error('Failed to stop speech recognition:', error);
+    } catch (_error) {
       setError('音声認識の停止に失敗しました');
     }
   }, [isListening]);

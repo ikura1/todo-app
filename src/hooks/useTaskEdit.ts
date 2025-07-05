@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 export interface UseTaskEditReturn {
   editingTaskId: string | null;
@@ -25,17 +25,23 @@ export function useTaskEdit(): UseTaskEditReturn {
     setEditingText('');
   }, []);
 
-  const saveEditing = useCallback((onSave: (taskId: string, text: string) => void) => {
-    if (editingTaskId && editingText.trim()) {
-      onSave(editingTaskId, editingText.trim());
-      setEditingTaskId(null);
-      setEditingText('');
-    }
-  }, [editingTaskId, editingText]);
+  const saveEditing = useCallback(
+    (onSave: (taskId: string, text: string) => void) => {
+      if (editingTaskId && editingText.trim()) {
+        onSave(editingTaskId, editingText.trim());
+        setEditingTaskId(null);
+        setEditingText('');
+      }
+    },
+    [editingTaskId, editingText]
+  );
 
-  const isEditingTask = useCallback((taskId: string) => {
-    return editingTaskId === taskId;
-  }, [editingTaskId]);
+  const isEditingTask = useCallback(
+    (taskId: string) => {
+      return editingTaskId === taskId;
+    },
+    [editingTaskId]
+  );
 
   return {
     editingTaskId,

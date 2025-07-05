@@ -1,19 +1,89 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Task } from '@/types/task';
 import { TaskList } from './TaskList';
-import { Task } from '@/types/task';
 
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, whileHover, whileTap, initial, animate, exit, transition, layout, ...props }: any) => <div {...props}>{children}</div>,
-    li: ({ children, whileHover, whileTap, initial, animate, exit, transition, layout, ...props }: any) => <li {...props}>{children}</li>,
-    h2: ({ children, whileHover, whileTap, initial, animate, exit, transition, layout, ...props }: any) => <h2 {...props}>{children}</h2>,
-    p: ({ children, whileHover, whileTap, initial, animate, exit, transition, layout, ...props }: any) => <p {...props}>{children}</p>,
-    span: ({ children, whileHover, whileTap, initial, animate, exit, transition, layout, ...props }: any) => <span {...props}>{children}</span>,
-    input: ({ children, whileHover, whileTap, initial, animate, exit, transition, layout, ...props }: any) => <input {...props}>{children}</input>,
-    button: ({ children, whileHover, whileTap, initial, animate, exit, transition, layout, ...props }: any) => <button {...props}>{children}</button>,
+    div: ({
+      children,
+      whileHover,
+      whileTap,
+      initial,
+      animate,
+      exit,
+      transition,
+      layout,
+      ...props
+    }: any) => <div {...props}>{children}</div>,
+    li: ({
+      children,
+      whileHover,
+      whileTap,
+      initial,
+      animate,
+      exit,
+      transition,
+      layout,
+      ...props
+    }: any) => <li {...props}>{children}</li>,
+    h2: ({
+      children,
+      whileHover,
+      whileTap,
+      initial,
+      animate,
+      exit,
+      transition,
+      layout,
+      ...props
+    }: any) => <h2 {...props}>{children}</h2>,
+    p: ({
+      children,
+      whileHover,
+      whileTap,
+      initial,
+      animate,
+      exit,
+      transition,
+      layout,
+      ...props
+    }: any) => <p {...props}>{children}</p>,
+    span: ({
+      children,
+      whileHover,
+      whileTap,
+      initial,
+      animate,
+      exit,
+      transition,
+      layout,
+      ...props
+    }: any) => <span {...props}>{children}</span>,
+    input: ({
+      children,
+      whileHover,
+      whileTap,
+      initial,
+      animate,
+      exit,
+      transition,
+      layout,
+      ...props
+    }: any) => <input {...props} />,
+    button: ({
+      children,
+      whileHover,
+      whileTap,
+      initial,
+      animate,
+      exit,
+      transition,
+      layout,
+      ...props
+    }: any) => <button {...props}>{children}</button>,
   },
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }));
@@ -30,7 +100,7 @@ describe('TaskList', () => {
       completed: false,
       createdAt: new Date(),
       updatedAt: new Date(),
-      priority: 'medium'
+      priority: 'medium',
     },
     {
       id: '2',
@@ -38,8 +108,8 @@ describe('TaskList', () => {
       completed: true,
       createdAt: new Date(),
       updatedAt: new Date(),
-      priority: 'high'
-    }
+      priority: 'high',
+    },
   ];
 
   beforeEach(() => {
@@ -50,21 +120,23 @@ describe('TaskList', () => {
 
   it('should render empty state when no tasks', () => {
     render(
-      <TaskList 
-        tasks={[]} 
+      <TaskList
+        tasks={[]}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
       />
     );
 
-    expect(screen.getByText('まだタスクがありません。上のフォームから追加してください。')).toBeInTheDocument();
+    expect(
+      screen.getByText('まだタスクがありません。上のフォームから追加してください。')
+    ).toBeInTheDocument();
   });
 
   it('should render task list with tasks', () => {
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
@@ -79,8 +151,8 @@ describe('TaskList', () => {
   it('should call onToggleComplete when checkbox is clicked', async () => {
     const user = userEvent.setup();
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
@@ -96,8 +168,8 @@ describe('TaskList', () => {
   it('should call onDelete when delete button is clicked', async () => {
     const user = userEvent.setup();
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
@@ -112,8 +184,8 @@ describe('TaskList', () => {
 
   it('should show completed tasks with strikethrough', () => {
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
@@ -126,8 +198,8 @@ describe('TaskList', () => {
 
   it('should show priority for each task', () => {
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
@@ -141,8 +213,8 @@ describe('TaskList', () => {
   it('should enter edit mode when clicking on task text', async () => {
     const user = userEvent.setup();
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
@@ -162,8 +234,8 @@ describe('TaskList', () => {
   it('should save edited text when pressing Enter key', async () => {
     const user = userEvent.setup();
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
@@ -184,8 +256,8 @@ describe('TaskList', () => {
   it('should cancel editing when pressing Escape key', async () => {
     const user = userEvent.setup();
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
@@ -209,8 +281,8 @@ describe('TaskList', () => {
   it('should save edited text when clicking save button', async () => {
     const user = userEvent.setup();
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
@@ -233,8 +305,8 @@ describe('TaskList', () => {
   it('should show cancel button functionality (note: blur event saves first)', async () => {
     const user = userEvent.setup();
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
@@ -250,10 +322,10 @@ describe('TaskList', () => {
 
     // When we tab to the cancel button, the input loses focus and saves due to onBlur
     await user.tab();
-    
+
     // The edit should be saved due to blur event
     expect(mockOnEdit).toHaveBeenCalledWith('1', '編集されたタスク');
-    
+
     // Should exit edit mode and show the original text temporarily
     expect(screen.queryByDisplayValue('編集されたタスク')).not.toBeInTheDocument();
   });
@@ -261,8 +333,8 @@ describe('TaskList', () => {
   it('should save edited text when input loses focus', async () => {
     const user = userEvent.setup();
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
@@ -275,7 +347,7 @@ describe('TaskList', () => {
     const editInput = screen.getByDisplayValue('テストタスク1');
     await user.clear(editInput);
     await user.type(editInput, '編集されたタスク');
-    
+
     // Click outside to trigger blur
     await user.click(document.body);
 
@@ -285,8 +357,8 @@ describe('TaskList', () => {
   it('should hide delete button when in edit mode', async () => {
     const user = userEvent.setup();
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
@@ -309,8 +381,8 @@ describe('TaskList', () => {
   it('should update input value when typing', async () => {
     const user = userEvent.setup();
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
@@ -330,8 +402,8 @@ describe('TaskList', () => {
   it('should focus on input when entering edit mode', async () => {
     const user = userEvent.setup();
     render(
-      <TaskList 
-        tasks={sampleTasks} 
+      <TaskList
+        tasks={sampleTasks}
         onToggleComplete={mockOnToggleComplete}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}

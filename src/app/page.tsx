@@ -1,21 +1,21 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { TaskForm } from '@/components/TaskForm';
-import { DragAndDropTaskList } from '@/components/DragAndDropTaskList';
-import { TaskFilter } from '@/components/TaskFilter';
-import { TaskSort, SortOption, SortDirection } from '@/components/TaskSort';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
-import { PWAInstallButton } from '@/components/PWAInstallButton';
-import { OfflineIndicator } from '@/components/OfflineIndicator';
-import { TaskDashboard } from '@/components/TaskDashboard';
 import { DashboardButton } from '@/components/DashboardButton';
+import { DragAndDropTaskList } from '@/components/DragAndDropTaskList';
+import { OfflineIndicator } from '@/components/OfflineIndicator';
+import { PWAInstallButton } from '@/components/PWAInstallButton';
+import { TaskDashboard } from '@/components/TaskDashboard';
+import { TaskFilter } from '@/components/TaskFilter';
+import { TaskForm } from '@/components/TaskForm';
+import { type SortDirection, type SortOption, TaskSort } from '@/components/TaskSort';
+import { loadTasksFromStorage, saveTasksToStorage } from '@/lib/storage';
 import { createTask, toggleTaskComplete, updateTask } from '@/lib/task';
-import { saveTasksToStorage, loadTasksFromStorage } from '@/lib/storage';
-import { filterTasks, TaskFilter as TaskFilterType } from '@/lib/taskFilter';
+import { filterTasks, type TaskFilter as TaskFilterType } from '@/lib/taskFilter';
 import { sortTasks } from '@/lib/taskSort';
-import { Task } from '@/types/task';
+import type { Task } from '@/types/task';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -46,55 +46,52 @@ export default function Home() {
   const taskCounts = useMemo(() => {
     return {
       all: tasks.length,
-      active: tasks.filter(task => !task.completed).length,
-      completed: tasks.filter(task => task.completed).length,
+      active: tasks.filter((task) => !task.completed).length,
+      completed: tasks.filter((task) => task.completed).length,
     };
   }, [tasks]);
 
   // 利用可能なカテゴリ一覧
   const availableCategories = useMemo(() => {
     const categories = tasks
-      .map(task => task.category)
+      .map((task) => task.category)
       .filter((category): category is string => Boolean(category));
     return Array.from(new Set(categories));
   }, [tasks]);
 
-  const handleSubmit = useCallback(async (taskData: {
-    text: string;
-    priority: 'low' | 'medium' | 'high';
-    category?: string;
-    dueDate?: Date;
-  }) => {
-    setIsLoading(true);
-    try {
-      const newTask = createTask(taskData.text, {
-        priority: taskData.priority,
-        category: taskData.category,
-        dueDate: taskData.dueDate,
-      });
-      setTasks(prev => [...prev, newTask]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const handleSubmit = useCallback(
+    async (taskData: {
+      text: string;
+      priority: 'low' | 'medium' | 'high';
+      category?: string;
+      dueDate?: Date;
+    }) => {
+      setIsLoading(true);
+      try {
+        const newTask = createTask(taskData.text, {
+          priority: taskData.priority,
+          category: taskData.category,
+          dueDate: taskData.dueDate,
+        });
+        setTasks((prev) => [...prev, newTask]);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
 
   const handleToggleComplete = useCallback((taskId: string) => {
-    setTasks(prev => 
-      prev.map(task => 
-        task.id === taskId ? toggleTaskComplete(task) : task
-      )
-    );
+    setTasks((prev) => prev.map((task) => (task.id === taskId ? toggleTaskComplete(task) : task)));
   }, []);
 
   const handleDelete = useCallback((taskId: string) => {
-    setTasks(prev => prev.filter(task => task.id !== taskId));
+    setTasks((prev) => prev.filter((task) => task.id !== taskId));
   }, []);
 
   const handleEdit = useCallback((taskId: string, newText: string) => {
-    setTasks(prev => 
-      prev.map(task => 
-        task.id === taskId ? updateTask(task, { text: newText }) : task
-      )
+    setTasks((prev) =>
+      prev.map((task) => (task.id === taskId ? updateTask(task, { text: newText }) : task))
     );
   }, []);
 
@@ -112,17 +109,17 @@ export default function Home() {
       <OfflineIndicator />
       <PWAInstallButton />
       <DashboardButton onClick={() => setIsDashboardOpen(true)} />
-      <TaskDashboard 
-        tasks={tasks} 
-        isOpen={isDashboardOpen} 
-        onClose={() => setIsDashboardOpen(false)} 
+      <TaskDashboard
+        tasks={tasks}
+        isOpen={isDashboardOpen}
+        onClose={() => setIsDashboardOpen(false)}
       />
       <div className="max-w-2xl mx-auto px-4">
-        <motion.header 
+        <motion.header
           className="text-center mb-8 relative"
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <motion.div
             className="absolute top-0 right-0"
@@ -132,15 +129,15 @@ export default function Home() {
           >
             <DarkModeToggle />
           </motion.div>
-          <motion.h1 
+          <motion.h1
             className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-2"
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5, type: "spring", stiffness: 200 }}
+            transition={{ delay: 0.2, duration: 0.5, type: 'spring', stiffness: 200 }}
           >
             TODOアプリ
           </motion.h1>
-          <motion.p 
+          <motion.p
             className="text-gray-600 dark:text-gray-300"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -150,7 +147,7 @@ export default function Home() {
           </motion.p>
         </motion.header>
 
-        <motion.div 
+        <motion.div
           className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 dark:border-gray-700/20 p-6 mb-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -159,20 +156,16 @@ export default function Home() {
           <TaskForm onSubmit={handleSubmit} isLoading={isLoading} />
         </motion.div>
 
-        <TaskFilter 
+        <TaskFilter
           filter={filter}
           onFilterChange={setFilter}
           taskCounts={taskCounts}
           availableCategories={availableCategories}
         />
 
-        <TaskSort
-          sortBy={sortBy}
-          sortDirection={sortDirection}
-          onSortChange={handleSortChange}
-        />
+        <TaskSort sortBy={sortBy} sortDirection={sortDirection} onSortChange={handleSortChange} />
 
-        <DragAndDropTaskList 
+        <DragAndDropTaskList
           tasks={filteredAndSortedTasks}
           onToggleComplete={handleToggleComplete}
           onDelete={handleDelete}

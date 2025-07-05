@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { filterTasks, TaskFilter } from './taskFilter';
+import { beforeEach, describe, expect, it } from 'vitest';
+import type { Task } from '@/types/task';
 import { createTask } from './task';
-import { Task } from '@/types/task';
+import { filterTasks, type TaskFilter } from './taskFilter';
 
 describe('Task Filter', () => {
   let sampleTasks: Task[];
@@ -13,7 +13,7 @@ describe('Task Filter', () => {
       createTask('未完了タスク2', { priority: 'low', category: 'work' }),
       createTask('検索対象タスク', { tags: ['important'] }),
     ];
-    
+
     // 最初のタスクを完了状態にする
     sampleTasks[0] = { ...sampleTasks[0], completed: true };
   });
@@ -41,7 +41,7 @@ describe('Task Filter', () => {
       const result = filterTasks(sampleTasks, filter);
 
       expect(result).toHaveLength(3);
-      result.forEach(task => {
+      result.forEach((task) => {
         expect(task.completed).toBe(false);
       });
     });
@@ -88,10 +88,10 @@ describe('Task Filter', () => {
     });
 
     it('should apply multiple filters', () => {
-      const filter: TaskFilter = { 
-        status: 'active', 
+      const filter: TaskFilter = {
+        status: 'active',
         priority: 'high',
-        searchText: '未完了'
+        searchText: '未完了',
       };
       const result = filterTasks(sampleTasks, filter);
 
@@ -102,9 +102,9 @@ describe('Task Filter', () => {
     });
 
     it('should return empty array when no tasks match filter', () => {
-      const filter: TaskFilter = { 
+      const filter: TaskFilter = {
         status: 'completed',
-        priority: 'high' 
+        priority: 'high',
       };
       const result = filterTasks(sampleTasks, filter);
 
@@ -126,8 +126,8 @@ describe('Task Filter', () => {
           completed: false,
           createdAt: new Date(),
           updatedAt: new Date(),
-          priority: 'medium'
-        }
+          priority: 'medium',
+        },
       ];
 
       const filter: TaskFilter = { status: 'all', category: 'work' };

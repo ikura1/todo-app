@@ -21,10 +21,7 @@ export function PWAInstallButton() {
         onClick={installApp}
         className={`
           px-6 py-3 rounded-full shadow-lg text-white font-medium text-sm
-          ${isOnline 
-            ? 'bg-blue-500 hover:bg-blue-600' 
-            : 'bg-gray-500 cursor-not-allowed'
-          }
+          ${isOnline ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-500 cursor-not-allowed'}
           transition-colors duration-200 flex items-center gap-2
         `}
         disabled={!isOnline}
@@ -32,12 +29,7 @@ export function PWAInstallButton() {
         whileTap={isOnline ? { scale: 0.95 } : {}}
         transition={{ duration: 0.1 }}
       >
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -47,7 +39,7 @@ export function PWAInstallButton() {
         </svg>
         アプリをインストール
       </motion.button>
-      
+
       {!isOnline && (
         <motion.div
           className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-3 py-1 rounded whitespace-nowrap"

@@ -14,10 +14,10 @@ export function DashboardButton({ onClick }: DashboardButtonProps) {
       initial={{ opacity: 0, scale: 0.8, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 1.2 }}
-      whileHover={{ 
+      whileHover={{
         scale: 1.1,
         rotate: 5,
-        transition: { duration: 0.2 }
+        transition: { duration: 0.2 },
       }}
       whileTap={{ scale: 0.95 }}
       aria-label="ダッシュボードを開く"
@@ -37,7 +37,7 @@ export function DashboardButton({ onClick }: DashboardButtonProps) {
           d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
         />
       </motion.svg>
-      
+
       {/* パルスエフェクト */}
       <motion.div
         className="absolute inset-0 rounded-full bg-purple-400 opacity-75"
@@ -47,8 +47,8 @@ export function DashboardButton({ onClick }: DashboardButtonProps) {
         }}
         transition={{
           duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut"
+          repeat: Number.POSITIVE_INFINITY,
+          ease: 'easeInOut',
         }}
       />
     </motion.button>

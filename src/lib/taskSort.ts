@@ -1,5 +1,5 @@
-import { Task } from '@/types/task';
-import { SortOption, SortDirection } from '@/components/TaskSort';
+import type { SortDirection, SortOption } from '@/components/TaskSort';
+import type { Task } from '@/types/task';
 
 export function sortTasks(tasks: Task[], sortBy: SortOption, direction: SortDirection): Task[] {
   const sortedTasks = [...tasks].sort((a, b) => {
@@ -9,17 +9,18 @@ export function sortTasks(tasks: Task[], sortBy: SortOption, direction: SortDire
       case 'createdAt':
         comparison = a.createdAt.getTime() - b.createdAt.getTime();
         break;
-      
+
       case 'updatedAt':
         comparison = a.updatedAt.getTime() - b.updatedAt.getTime();
         break;
-      
-      case 'priority':
+
+      case 'priority': {
         // 優先度の重み付け: high=3, medium=2, low=1
         const priorityWeight = { high: 3, medium: 2, low: 1 };
         comparison = priorityWeight[a.priority] - priorityWeight[b.priority];
         break;
-      
+      }
+
       case 'dueDate':
         // 期限がないタスクは最後に配置
         if (!a.dueDate && !b.dueDate) {
@@ -32,11 +33,11 @@ export function sortTasks(tasks: Task[], sortBy: SortOption, direction: SortDire
           comparison = a.dueDate.getTime() - b.dueDate.getTime();
         }
         break;
-      
+
       case 'alphabetical':
         comparison = a.text.localeCompare(b.text, 'ja-JP');
         break;
-      
+
       default:
         comparison = 0;
     }

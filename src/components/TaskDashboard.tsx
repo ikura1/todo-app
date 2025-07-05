@@ -1,7 +1,7 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { Task } from '@/types/task';
+import { AnimatePresence, motion } from 'framer-motion';
+import type { Task } from '@/types/task';
 import { TaskStatistics } from './TaskStatistics';
 
 interface TaskDashboardProps {
@@ -31,11 +31,11 @@ export function TaskDashboard({ tasks, isOpen, onClose }: TaskDashboardProps) {
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ 
-              type: "spring", 
-              damping: 25, 
+            transition={{
+              type: 'spring',
+              damping: 25,
               stiffness: 200,
-              duration: 0.3 
+              duration: 0.3,
             }}
           >
             <div className="p-6">
@@ -97,37 +97,43 @@ export function TaskDashboard({ tasks, isOpen, onClose }: TaskDashboardProps) {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.8 + index * 0.05, duration: 0.2 }}
                       >
-                        <div className={`w-3 h-3 rounded-full ${
-                          task.completed 
-                            ? 'bg-green-500' 
-                            : task.priority === 'high'
-                            ? 'bg-red-500'
-                            : task.priority === 'medium'
-                            ? 'bg-orange-500'
-                            : 'bg-blue-500'
-                        }`} />
+                        <div
+                          className={`w-3 h-3 rounded-full ${
+                            task.completed
+                              ? 'bg-green-500'
+                              : task.priority === 'high'
+                                ? 'bg-red-500'
+                                : task.priority === 'medium'
+                                  ? 'bg-orange-500'
+                                  : 'bg-blue-500'
+                          }`}
+                        />
                         <div className="flex-1 min-w-0">
-                          <p className={`text-sm truncate ${
-                            task.completed 
-                              ? 'line-through text-gray-500 dark:text-gray-400' 
-                              : 'text-gray-900 dark:text-gray-100'
-                          }`}>
+                          <p
+                            className={`text-sm truncate ${
+                              task.completed
+                                ? 'line-through text-gray-500 dark:text-gray-400'
+                                : 'text-gray-900 dark:text-gray-100'
+                            }`}
+                          >
                             {task.text}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
                             {task.updatedAt.toLocaleDateString('ja-JP')} - {task.priority}
                           </p>
                         </div>
-                        <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          task.completed
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
-                            : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
-                        }`}>
+                        <div
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            task.completed
+                              ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                              : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
+                          }`}
+                        >
                           {task.completed ? '完了' : '進行中'}
                         </div>
                       </motion.div>
                     ))}
-                  
+
                   {tasks.length === 0 && (
                     <motion.div
                       className="text-center py-8 text-gray-500 dark:text-gray-400"

@@ -1,7 +1,7 @@
-import { describe, test, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import type { Task } from '@/types/task';
 import { DragAndDropTaskList } from './DragAndDropTaskList';
-import { Task } from '@/types/task';
 
 // Mock @dnd-kit/core
 vi.mock('@dnd-kit/core', () => ({
@@ -25,16 +25,24 @@ vi.mock('@dnd-kit/sortable', () => ({
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, className, initial, animate, transition, ...props }: any) => (
-      <div className={className} {...props}>{children}</div>
+      <div className={className} {...props}>
+        {children}
+      </div>
     ),
     h2: ({ children, className, ...props }: any) => (
-      <h2 className={className} {...props}>{children}</h2>
+      <h2 className={className} {...props}>
+        {children}
+      </h2>
     ),
     p: ({ children, className, ...props }: any) => (
-      <p className={className} {...props}>{children}</p>
+      <p className={className} {...props}>
+        {children}
+      </p>
     ),
     li: ({ children, className, ...props }: any) => (
-      <li className={className} {...props}>{children}</li>
+      <li className={className} {...props}>
+        {children}
+      </li>
     ),
   },
 }));
@@ -94,14 +102,16 @@ describe('DragAndDropTaskList', () => {
 
   test('renders empty state when no tasks', () => {
     render(<DragAndDropTaskList {...mockProps} tasks={[]} />);
-    
+
     expect(screen.getByText('タスク一覧 (0)')).toBeInTheDocument();
-    expect(screen.getByText('まだタスクがありません。上のフォームから追加してください。')).toBeInTheDocument();
+    expect(
+      screen.getByText('まだタスクがありません。上のフォームから追加してください。')
+    ).toBeInTheDocument();
   });
 
   test('renders tasks correctly', () => {
     render(<DragAndDropTaskList {...mockProps} />);
-    
+
     expect(screen.getByText('タスク一覧 (2)')).toBeInTheDocument();
     expect(screen.getByText('テストタスク1')).toBeInTheDocument();
     expect(screen.getByText('テストタスク2')).toBeInTheDocument();
@@ -109,48 +119,48 @@ describe('DragAndDropTaskList', () => {
 
   test('renders DndContext and SortableContext', () => {
     render(<DragAndDropTaskList {...mockProps} />);
-    
+
     expect(screen.getByTestId('dnd-context')).toBeInTheDocument();
     expect(screen.getByTestId('sortable-context')).toBeInTheDocument();
   });
 
   test('renders SortableTaskItem for each task', () => {
     render(<DragAndDropTaskList {...mockProps} />);
-    
+
     expect(screen.getByTestId('sortable-task-1')).toBeInTheDocument();
     expect(screen.getByTestId('sortable-task-2')).toBeInTheDocument();
   });
 
   test('calls onToggleComplete when checkbox is clicked', () => {
     render(<DragAndDropTaskList {...mockProps} />);
-    
+
     const checkbox = screen.getByTestId('checkbox-1');
     fireEvent.click(checkbox);
-    
+
     expect(mockProps.onToggleComplete).toHaveBeenCalledWith('1');
   });
 
   test('calls onDelete when delete button is clicked', () => {
     render(<DragAndDropTaskList {...mockProps} />);
-    
+
     const deleteButton = screen.getByTestId('delete-1');
     fireEvent.click(deleteButton);
-    
+
     expect(mockProps.onDelete).toHaveBeenCalledWith('1');
   });
 
   test('calls onEdit when edit button is clicked', () => {
     render(<DragAndDropTaskList {...mockProps} />);
-    
+
     const editButton = screen.getByTestId('edit-1');
     fireEvent.click(editButton);
-    
+
     expect(mockProps.onEdit).toHaveBeenCalledWith('1', 'edited text');
   });
 
   test('renders drag overlay container', () => {
     render(<DragAndDropTaskList {...mockProps} />);
-    
+
     expect(screen.getByTestId('drag-overlay')).toBeInTheDocument();
   });
 });

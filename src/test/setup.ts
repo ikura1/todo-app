@@ -1,8 +1,8 @@
-import '@testing-library/jest-dom'
-import { vi } from 'vitest'
+import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 
 // Mock HTMLElement.prototype.scrollIntoView
-HTMLElement.prototype.scrollIntoView = vi.fn()
+HTMLElement.prototype.scrollIntoView = vi.fn();
 
 // Mock localStorage
 const localStorageMock = {
@@ -12,7 +12,7 @@ const localStorageMock = {
   clear: vi.fn(),
   length: 0,
   key: vi.fn(),
-}
+};
 
 // Mock navigator
 Object.defineProperty(window, 'navigator', {
@@ -22,25 +22,25 @@ Object.defineProperty(window, 'navigator', {
       register: vi.fn(() => Promise.resolve()),
     },
   },
-})
+});
 
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
-})
+});
 
 // Mock IntersectionObserver
 global.IntersectionObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
-}))
+}));
 
 // Mock ResizeObserver
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
-}))
+}));
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
@@ -55,14 +55,14 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })),
-})
+});
 
 // Mock URL.createObjectURL
-global.URL.createObjectURL = vi.fn()
+global.URL.createObjectURL = vi.fn();
 
 // Mock crypto
 Object.defineProperty(global, 'crypto', {
   value: {
     randomUUID: vi.fn(() => 'mocked-uuid'),
   },
-})
+});

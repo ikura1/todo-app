@@ -1,11 +1,11 @@
 'use client';
 
-import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { motion } from 'framer-motion';
-import { Task } from '@/types/task';
+import React from 'react';
 import { useTaskEdit } from '@/hooks/useTaskEdit';
+import type { Task } from '@/types/task';
 
 interface SortableTaskItemProps {
   task: Task;
@@ -15,30 +15,19 @@ interface SortableTaskItemProps {
   onEdit: (taskId: string, newText: string) => void;
 }
 
-export const SortableTaskItem = React.memo(function SortableTaskItem({ 
-  task, 
-  index, 
-  onToggleComplete, 
-  onDelete, 
-  onEdit 
+export const SortableTaskItem = React.memo(function SortableTaskItem({
+  task,
+  index,
+  onToggleComplete,
+  onDelete,
+  onEdit,
 }: SortableTaskItemProps) {
-  const { 
-    editingText, 
-    startEditing, 
-    setEditingText, 
-    cancelEditing, 
-    saveEditing, 
-    isEditingTask 
-  } = useTaskEdit();
+  const { editingText, startEditing, setEditingText, cancelEditing, saveEditing, isEditingTask } =
+    useTaskEdit();
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: task.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: task.id,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -52,17 +41,17 @@ export const SortableTaskItem = React.memo(function SortableTaskItem({
       className={`flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${isDragging ? 'opacity-50' : ''}`}
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ 
+      transition={{
         delay: index * 0.05,
         duration: 0.3,
-        type: "spring",
+        type: 'spring',
         stiffness: 500,
-        damping: 30
+        damping: 30,
       }}
       layout
-      whileHover={{ 
+      whileHover={{
         scale: isDragging ? 1 : 1.02,
-        transition: { duration: 0.1 }
+        transition: { duration: 0.1 },
       }}
     >
       {/* ドラッグハンドル */}
@@ -130,7 +119,7 @@ export const SortableTaskItem = React.memo(function SortableTaskItem({
           transition={{ duration: 0.2 }}
         />
       ) : (
-        <motion.span 
+        <motion.span
           className={`flex-1 cursor-pointer ${task.completed ? 'line-through text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-gray-100'}`}
           animate={{
             opacity: task.completed ? 0.6 : 1,
@@ -158,26 +147,28 @@ export const SortableTaskItem = React.memo(function SortableTaskItem({
       <div className="flex flex-col gap-1 items-end">
         {/* 期限 */}
         {task.dueDate && (
-          <motion.div 
+          <motion.div
             className={`px-2 py-1 rounded text-xs font-medium ${
               new Date(task.dueDate) < new Date() && !task.completed
                 ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
-                : new Date(task.dueDate) < new Date(Date.now() + 24 * 60 * 60 * 1000) && !task.completed
-                ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
-                : 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
+                : new Date(task.dueDate) < new Date(Date.now() + 24 * 60 * 60 * 1000) &&
+                    !task.completed
+                  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                  : 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
             }`}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.2 }}
             whileHover={{ scale: 1.05 }}
           >
-            📅 {new Date(task.dueDate).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' })}
+            📅{' '}
+            {new Date(task.dueDate).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' })}
           </motion.div>
         )}
-        
+
         {/* カテゴリ */}
         {task.category && (
-          <motion.div 
+          <motion.div
             className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -187,15 +178,15 @@ export const SortableTaskItem = React.memo(function SortableTaskItem({
             📂 {task.category}
           </motion.div>
         )}
-        
+
         {/* 優先度 */}
-        <motion.div 
+        <motion.div
           className={`px-2 py-1 rounded-full text-xs font-medium ${
-            task.priority === 'high' 
+            task.priority === 'high'
               ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
               : task.priority === 'medium'
-              ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400'
-              : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
+                ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400'
+                : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
           }`}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -234,9 +225,9 @@ export const SortableTaskItem = React.memo(function SortableTaskItem({
         <motion.button
           onClick={() => onDelete(task.id)}
           className="px-3 py-1 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
-          whileHover={{ 
+          whileHover={{
             scale: 1.05,
-            backgroundColor: "#fef2f2"
+            backgroundColor: '#fef2f2',
           }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.1 }}

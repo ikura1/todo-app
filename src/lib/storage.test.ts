@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { saveTasksToStorage, loadTasksFromStorage, STORAGE_KEY } from './storage';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Task } from '@/types/task';
+import { loadTasksFromStorage, STORAGE_KEY, saveTasksToStorage } from './storage';
 import { createTask } from './task';
-import { Task } from '@/types/task';
 
 // localStorage のモック
 const localStorageMock = {
@@ -13,7 +13,7 @@ const localStorageMock = {
 
 // global オブジェクトに localStorage を設定
 Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock
+  value: localStorageMock,
 });
 
 describe('Storage', () => {
@@ -27,17 +27,11 @@ describe('Storage', () => {
 
   describe('saveTasksToStorage', () => {
     it('should save tasks to localStorage', () => {
-      const tasks: Task[] = [
-        createTask('テストタスク1'),
-        createTask('テストタスク2'),
-      ];
+      const tasks: Task[] = [createTask('テストタスク1'), createTask('テストタスク2')];
 
       saveTasksToStorage(tasks);
 
-      expect(localStorageMock.setItem).toHaveBeenCalledWith(
-        STORAGE_KEY,
-        JSON.stringify(tasks)
-      );
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(STORAGE_KEY, JSON.stringify(tasks));
     });
 
     it('should save empty array to localStorage', () => {
@@ -45,10 +39,7 @@ describe('Storage', () => {
 
       saveTasksToStorage(tasks);
 
-      expect(localStorageMock.setItem).toHaveBeenCalledWith(
-        STORAGE_KEY,
-        JSON.stringify(tasks)
-      );
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(STORAGE_KEY, JSON.stringify(tasks));
     });
 
     it('should handle localStorage errors gracefully', () => {
@@ -64,11 +55,8 @@ describe('Storage', () => {
 
   describe('loadTasksFromStorage', () => {
     it('should load tasks from localStorage', () => {
-      const tasks: Task[] = [
-        createTask('テストタスク1'),
-        createTask('テストタスク2'),
-      ];
-      
+      const tasks: Task[] = [createTask('テストタスク1'), createTask('テストタスク2')];
+
       localStorageMock.getItem.mockReturnValue(JSON.stringify(tasks));
 
       const loadedTasks = loadTasksFromStorage();
@@ -106,7 +94,7 @@ describe('Storage', () => {
     it('should restore Date objects correctly', () => {
       const originalTask = createTask('テストタスク');
       const tasksWithDates = [originalTask];
-      
+
       // JSON.stringify で Date が文字列になることをシミュレート
       const serializedTasks = JSON.stringify(tasksWithDates);
       localStorageMock.getItem.mockReturnValue(serializedTasks);

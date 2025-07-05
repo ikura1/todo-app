@@ -1,4 +1,4 @@
-import { Task } from '@/types/task';
+import type { Task } from '@/types/task';
 
 export interface TaskFilter {
   status: 'all' | 'active' | 'completed';
@@ -10,7 +10,7 @@ export interface TaskFilter {
 }
 
 export function filterTasks(tasks: Task[], filter: TaskFilter): Task[] {
-  return tasks.filter(task => {
+  return tasks.filter((task) => {
     // ステータスフィルター
     if (filter.status === 'active' && task.completed) {
       return false;
@@ -39,7 +39,7 @@ export function filterTasks(tasks: Task[], filter: TaskFilter): Task[] {
 
     // タグフィルター
     if (filter.tags && filter.tags.length > 0) {
-      if (!task.tags || !filter.tags.some(filterTag => task.tags!.includes(filterTag))) {
+      if (!task.tags || !filter.tags.some((filterTag) => task.tags?.includes(filterTag))) {
         return false;
       }
     }
@@ -49,7 +49,11 @@ export function filterTasks(tasks: Task[], filter: TaskFilter): Task[] {
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       const taskDueDate = new Date(task.dueDate);
-      const taskDueDateOnly = new Date(taskDueDate.getFullYear(), taskDueDate.getMonth(), taskDueDate.getDate());
+      const taskDueDateOnly = new Date(
+        taskDueDate.getFullYear(),
+        taskDueDate.getMonth(),
+        taskDueDate.getDate()
+      );
 
       switch (filter.dueDateFilter) {
         case 'overdue':
@@ -62,13 +66,14 @@ export function filterTasks(tasks: Task[], filter: TaskFilter): Task[] {
             return false;
           }
           break;
-        case 'thisWeek':
+        case 'thisWeek': {
           const weekFromNow = new Date(today);
           weekFromNow.setDate(today.getDate() + 7);
           if (taskDueDateOnly > weekFromNow) {
             return false;
           }
           break;
+        }
       }
     } else if (filter.dueDateFilter) {
       // 期限フィルターが設定されているが、タスクに期限がない場合は除外

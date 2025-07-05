@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface UsePWAReturn {
   isInstallable: boolean;
@@ -51,13 +51,10 @@ export function usePWA(): UsePWAReturn {
 
     // Service Workerの登録
     if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then((registration) => {
-          console.log('Service Worker registered successfully:', registration);
-        })
-        .catch((error) => {
-          console.log('Service Worker registration failed:', error);
-        });
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((_registration) => {})
+        .catch((_error) => {});
     }
 
     // PWAが既にインストールされているかチェック
@@ -88,19 +85,15 @@ export function usePWA(): UsePWAReturn {
     try {
       await deferredPrompt.prompt();
       const choiceResult = await deferredPrompt.userChoice;
-      
+
       if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt');
         setIsInstalled(true);
       } else {
-        console.log('User dismissed the install prompt');
       }
-      
+
       setDeferredPrompt(null);
       setIsInstallable(false);
-    } catch (error) {
-      console.error('Error during app installation:', error);
-    }
+    } catch (_error) {}
   };
 
   return {

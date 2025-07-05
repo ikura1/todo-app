@@ -32,13 +32,13 @@ export function TaskSort({ sortBy, sortDirection, onSortChange }: TaskSortProps)
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 dark:border-gray-700/20 p-4 mb-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.1 }}
     >
-      <motion.h3 
+      <motion.h3
         className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -46,7 +46,7 @@ export function TaskSort({ sortBy, sortDirection, onSortChange }: TaskSortProps)
       >
         並び替え
       </motion.h3>
-      
+
       <div className="flex flex-wrap gap-2">
         {sortOptions.map((option, index) => (
           <motion.button
