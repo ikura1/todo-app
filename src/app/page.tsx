@@ -6,6 +6,8 @@ import { TaskForm } from '@/components/TaskForm';
 import { DragAndDropTaskList } from '@/components/DragAndDropTaskList';
 import { TaskFilter } from '@/components/TaskFilter';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
+import { PWAInstallButton } from '@/components/PWAInstallButton';
+import { OfflineIndicator } from '@/components/OfflineIndicator';
 import { createTask, toggleTaskComplete, updateTask } from '@/lib/task';
 import { saveTasksToStorage, loadTasksFromStorage } from '@/lib/storage';
 import { filterTasks, TaskFilter as TaskFilterType } from '@/lib/taskFilter';
@@ -77,6 +79,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900 py-8 transition-colors duration-300">
+      <OfflineIndicator />
+      <PWAInstallButton />
       <div className="max-w-2xl mx-auto px-4">
         <motion.header 
           className="text-center mb-8 relative"
