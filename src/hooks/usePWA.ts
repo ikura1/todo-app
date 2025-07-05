@@ -21,10 +21,15 @@ export function usePWA(): UsePWAReturn {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
-  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
+  const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
+    // 初期のオンライン状態を設定
+    if (typeof navigator !== 'undefined') {
+      setIsOnline(navigator.onLine);
+    }
 
     // PWAインストール可能イベントのリスナー
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -45,7 +50,7 @@ export function usePWA(): UsePWAReturn {
     const handleOffline = () => setIsOnline(false);
 
     // Service Workerの登録
-    if ('serviceWorker' in navigator) {
+    if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
         .then((registration) => {
           console.log('Service Worker registered successfully:', registration);

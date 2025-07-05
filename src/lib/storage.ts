@@ -3,6 +3,8 @@ import { Task } from '@/types/task';
 export const STORAGE_KEY = 'todo-app-tasks';
 
 export function saveTasksToStorage(tasks: Task[]): void {
+  if (typeof window === 'undefined') return;
+  
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
   } catch (error) {
@@ -11,6 +13,8 @@ export function saveTasksToStorage(tasks: Task[]): void {
 }
 
 export function loadTasksFromStorage(): Task[] {
+  if (typeof window === 'undefined') return [];
+  
   try {
     const storedData = localStorage.getItem(STORAGE_KEY);
     
