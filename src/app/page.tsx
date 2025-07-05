@@ -8,6 +8,8 @@ import { TaskFilter } from '@/components/TaskFilter';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
 import { PWAInstallButton } from '@/components/PWAInstallButton';
 import { OfflineIndicator } from '@/components/OfflineIndicator';
+import { TaskDashboard } from '@/components/TaskDashboard';
+import { DashboardButton } from '@/components/DashboardButton';
 import { createTask, toggleTaskComplete, updateTask } from '@/lib/task';
 import { saveTasksToStorage, loadTasksFromStorage } from '@/lib/storage';
 import { filterTasks, TaskFilter as TaskFilterType } from '@/lib/taskFilter';
@@ -17,6 +19,7 @@ export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState<TaskFilterType>({ status: 'all' });
+  const [isDashboardOpen, setIsDashboardOpen] = useState(false);
 
   // 初期化時にlocalStorageからタスクを読み込み
   useEffect(() => {
@@ -81,6 +84,12 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900 py-8 transition-colors duration-300">
       <OfflineIndicator />
       <PWAInstallButton />
+      <DashboardButton onClick={() => setIsDashboardOpen(true)} />
+      <TaskDashboard 
+        tasks={tasks} 
+        isOpen={isDashboardOpen} 
+        onClose={() => setIsDashboardOpen(false)} 
+      />
       <div className="max-w-2xl mx-auto px-4">
         <motion.header 
           className="text-center mb-8 relative"
