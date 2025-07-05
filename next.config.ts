@@ -9,8 +9,8 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/todo-claude' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/todo-claude' : '',
+  basePath: process.env.NODE_ENV === 'production' ? '/todo-app' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/todo-app' : '',
 };
 
 export default nextConfig;
