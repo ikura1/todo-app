@@ -1,0 +1,21 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-unsafe-function-type": "off",
+    "react/no-unescaped-entities": "off"
+  },
+  "ignorePatterns": [
+    "**/*.test.tsx",
+    "**/*.test.ts",
+    "**/*.spec.tsx",
+    "**/*.spec.ts",
+    "src/components/DragAndDropTaskList.test.tsx",
+    "src/components/SortableTaskItem.test.tsx",
+    "src/components/TaskList.test.tsx",
+    "src/components/VoiceInputButton.test.tsx",
+    "src/hooks/usePWA.test.tsx",
+    "src/hooks/useSpeechRecognition.test.tsx"
+  ]
+}
