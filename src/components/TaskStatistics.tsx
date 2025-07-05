@@ -79,7 +79,7 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
     label: string;
     current: number;
     total: number;
-    color?: 'blue' | 'green' | 'purple' | 'orange';
+    color?: 'blue' | 'green' | 'purple' | 'orange' | 'red';
     delay?: number;
   }) => {
     const percentage = total > 0 ? (current / total) * 100 : 0;
@@ -89,6 +89,7 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
       green: 'bg-green-500',
       purple: 'bg-purple-500',
       orange: 'bg-orange-500',
+      red: 'bg-red-500',
     };
 
     return (
@@ -295,6 +296,96 @@ export function TaskStatistics({ tasks }: TaskStatisticsProps) {
               {stats.longestStreak}
             </motion.div>
             <div className="text-sm text-gray-600 dark:text-gray-400">最長連続日数</div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* カテゴリ別統計 */}
+      {Object.keys(stats.categoryBreakdown).length > 0 && (
+        <motion.div
+          className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 dark:border-gray-700/20 p-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.7 }}
+        >
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            📂 カテゴリ別タスク数
+          </h3>
+          <div className="space-y-3">
+            {Object.entries(stats.categoryBreakdown).map(([category, count], index) => (
+              <motion.div
+                key={category}
+                className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.8 + index * 0.1, duration: 0.2 }}
+              >
+                <span className="font-medium text-gray-900 dark:text-gray-100">
+                  📂 {category}
+                </span>
+                <span className="text-blue-600 dark:text-blue-400 font-bold">
+                  {count}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* 期限関連統計 */}
+      <motion.div
+        className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 dark:border-gray-700/20 p-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.8 }}
+      >
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          ⏰ 期限管理
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="text-center">
+            <motion.div
+              className="text-2xl font-bold text-red-600 dark:text-red-400"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.9, duration: 0.3, type: "spring" }}
+            >
+              {stats.overdueTasksCount}
+            </motion.div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">期限切れ</div>
+          </div>
+          <div className="text-center">
+            <motion.div
+              className="text-2xl font-bold text-orange-600 dark:text-orange-400"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 1.0, duration: 0.3, type: "spring" }}
+            >
+              {stats.dueTodayCount}
+            </motion.div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">今日期限</div>
+          </div>
+          <div className="text-center">
+            <motion.div
+              className="text-2xl font-bold text-yellow-600 dark:text-yellow-400"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 1.1, duration: 0.3, type: "spring" }}
+            >
+              {stats.dueThisWeekCount}
+            </motion.div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">今週期限</div>
+          </div>
+          <div className="text-center">
+            <motion.div
+              className="text-2xl font-bold text-gray-600 dark:text-gray-400"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 1.2, duration: 0.3, type: "spring" }}
+            >
+              {stats.tasksWithoutDueDate}
+            </motion.div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">期限なし</div>
           </div>
         </div>
       </motion.div>

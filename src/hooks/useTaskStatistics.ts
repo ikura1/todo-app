@@ -16,18 +16,22 @@ export interface TaskStatistics {
     medium: number;
     low: number;
   };
+  categoryBreakdown: Record<string, number>;
   tasksCreatedToday: number;
   tasksCompletedToday: number;
   averageTasksPerDay: number;
   longestStreak: number;
   currentStreak: number;
+  overdueTasksCount: number;
+  dueTodayCount: number;
+  dueThisWeekCount: number;
+  tasksWithoutDueDate: number;
 }
 
 export function useTaskStatistics(tasks: Task[]): TaskStatistics {
   return useMemo(() => {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
 
     // 基本統計
     const totalTasks = tasks.length;
@@ -47,6 +51,14 @@ export function useTaskStatistics(tasks: Task[]): TaskStatistics {
       medium: tasks.filter(task => task.completed && task.priority === 'medium').length,
       low: tasks.filter(task => task.completed && task.priority === 'low').length,
     };
+
+    // カテゴリ別統計
+    const categoryBreakdown: Record<string, number> = {};
+    tasks.forEach(task => {
+      if (task.category) {
+        categoryBreakdown[task.category] = (categoryBreakdown[task.category] || 0) + 1;
+      }
+    });
 
     // 今日の統計
     const tasksCreatedToday = tasks.filter(task => 
@@ -109,6 +121,30 @@ export function useTaskStatistics(tasks: Task[]): TaskStatistics {
     }
     longestStreak = Math.max(longestStreak, tempStreak);
 
+    // 期限関連の統計
+    const overdueTasksCount = tasks.filter(task => 
+      task.dueDate && 
+      new Date(task.dueDate) < today && 
+      !task.completed
+    ).length;
+
+    const dueTodayCount = tasks.filter(task => {
+      if (!task.dueDate) return false;
+      const dueDate = new Date(task.dueDate);
+      const dueDateOnly = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate());
+      return dueDateOnly.getTime() === today.getTime() && !task.completed;
+    }).length;
+
+    const dueThisWeekCount = tasks.filter(task => {
+      if (!task.dueDate) return false;
+      const dueDate = new Date(task.dueDate);
+      const weekFromNow = new Date(today);
+      weekFromNow.setDate(today.getDate() + 7);
+      return dueDate <= weekFromNow && dueDate >= today && !task.completed;
+    }).length;
+
+    const tasksWithoutDueDate = tasks.filter(task => !task.dueDate && !task.completed).length;
+
     return {
       totalTasks,
       completedTasks,
@@ -116,11 +152,16 @@ export function useTaskStatistics(tasks: Task[]): TaskStatistics {
       completionRate,
       priorityBreakdown,
       completedByPriority,
+      categoryBreakdown,
       tasksCreatedToday,
       tasksCompletedToday,
       averageTasksPerDay,
       longestStreak,
       currentStreak,
+      overdueTasksCount,
+      dueTodayCount,
+      dueThisWeekCount,
+      tasksWithoutDueDate,
     };
   }, [tasks]);
 }
