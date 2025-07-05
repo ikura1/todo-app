@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { motion } from 'framer-motion';
@@ -14,7 +15,7 @@ interface SortableTaskItemProps {
   onEdit: (taskId: string, newText: string) => void;
 }
 
-export function SortableTaskItem({ 
+export const SortableTaskItem = React.memo(function SortableTaskItem({ 
   task, 
   index, 
   onToggleComplete, 
@@ -22,7 +23,6 @@ export function SortableTaskItem({
   onEdit 
 }: SortableTaskItemProps) {
   const { 
-    editingTaskId, 
     editingText, 
     startEditing, 
     setEditingText, 
@@ -66,13 +66,15 @@ export function SortableTaskItem({
       }}
     >
       {/* ドラッグハンドル */}
-      <div
+      <motion.div
         {...attributes}
         {...listeners}
         className="cursor-grab active:cursor-grabbing p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
       >
         <svg
-          className="w-4 h-4 text-gray-400"
+          className="w-4 h-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -81,10 +83,10 @@ export function SortableTaskItem({
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M4 8h16M4 16h16"
+            d="M4 6h16M4 12h16M4 18h16"
           />
         </svg>
-      </div>
+      </motion.div>
 
       {/* チェックボックス */}
       <motion.input
@@ -132,15 +134,57 @@ export function SortableTaskItem({
         </motion.span>
       )}
 
-      {/* 優先度 */}
-      <motion.span 
-        className="text-xs text-gray-500 dark:text-gray-400"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.2 }}
-      >
-        {task.priority}
-      </motion.span>
+      {/* メタデータエリア */}
+      <div className="flex flex-col gap-1 items-end">
+        {/* 期限 */}
+        {task.dueDate && (
+          <motion.div 
+            className={`px-2 py-1 rounded text-xs font-medium ${
+              new Date(task.dueDate) < new Date() && !task.completed
+                ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                : new Date(task.dueDate) < new Date(Date.now() + 24 * 60 * 60 * 1000) && !task.completed
+                ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                : 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
+            }`}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.2 }}
+            whileHover={{ scale: 1.05 }}
+          >
+            📅 {new Date(task.dueDate).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' })}
+          </motion.div>
+        )}
+        
+        {/* カテゴリ */}
+        {task.category && (
+          <motion.div 
+            className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.25, duration: 0.2 }}
+            whileHover={{ scale: 1.05 }}
+          >
+            📂 {task.category}
+          </motion.div>
+        )}
+        
+        {/* 優先度 */}
+        <motion.div 
+          className={`px-2 py-1 rounded-full text-xs font-medium ${
+            task.priority === 'high' 
+              ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+              : task.priority === 'medium'
+              ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400'
+              : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
+          }`}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3, duration: 0.2 }}
+          whileHover={{ scale: 1.05 }}
+        >
+          {task.priority === 'high' ? '🔥 高' : task.priority === 'medium' ? '⚡ 中' : '💙 低'}
+        </motion.div>
+      </div>
 
       {/* アクションボタン */}
       {isEditingTask(task.id) ? (
@@ -180,4 +224,4 @@ export function SortableTaskItem({
       )}
     </motion.li>
   );
-}
+});
