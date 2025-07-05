@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { TaskForm } from '@/components/TaskForm';
-import { TaskList } from '@/components/TaskList';
+import { DragAndDropTaskList } from '@/components/DragAndDropTaskList';
 import { TaskFilter } from '@/components/TaskFilter';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
 import { createTask, toggleTaskComplete, updateTask } from '@/lib/task';
@@ -71,6 +71,10 @@ export default function Home() {
     );
   };
 
+  const handleTasksReorder = (reorderedTasks: Task[]) => {
+    setTasks(reorderedTasks);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900 py-8 transition-colors duration-300">
       <div className="max-w-2xl mx-auto px-4">
@@ -121,11 +125,12 @@ export default function Home() {
           taskCounts={taskCounts}
         />
 
-        <TaskList 
+        <DragAndDropTaskList 
           tasks={filteredTasks}
           onToggleComplete={handleToggleComplete}
           onDelete={handleDelete}
           onEdit={handleEdit}
+          onTasksReorder={handleTasksReorder}
         />
       </div>
     </div>
