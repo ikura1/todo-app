@@ -13,9 +13,7 @@ interface TaskListProps {
 
 export function TaskList({ tasks, onToggleComplete, onDelete, onEdit }: TaskListProps) {
   const { 
-    editingTaskId, 
     editingText, 
-    isEditing, 
     startEditing, 
     setEditingText, 
     cancelEditing, 

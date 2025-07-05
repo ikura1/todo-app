@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Task } from '@/types/task';
 import { TaskStatistics } from './TaskStatistics';
