@@ -115,7 +115,7 @@ export function VoiceInputButton({ onTranscript, disabled = false }: VoiceInputB
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}
         >
-          "{transcript}"
+          &quot;{transcript}&quot;
         </motion.div>
       )}
 
