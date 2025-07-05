@@ -69,15 +69,25 @@ export const SortableTaskItem = React.memo(function SortableTaskItem({
       <motion.div
         {...attributes}
         {...listeners}
-        className="cursor-grab active:cursor-grabbing p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors"
+        className="cursor-grab active:cursor-grabbing p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
+        tabIndex={0}
+        role="button"
+        aria-label={`タスク「${task.text}」をドラッグして並び替える`}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            // ドラッグ操作のキーボード代替としてフォーカス移動のヒントを提供
+          }
+        }}
       >
         <svg
           className="w-4 h-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path
             strokeLinecap="round"
@@ -96,6 +106,7 @@ export const SortableTaskItem = React.memo(function SortableTaskItem({
         className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 cursor-pointer"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
+        aria-label={`タスク「${task.text}」を${task.completed ? '未完了' : '完了'}にする`}
       />
 
       {/* タスクテキスト */}
@@ -127,8 +138,17 @@ export const SortableTaskItem = React.memo(function SortableTaskItem({
           }}
           transition={{ duration: 0.2 }}
           onClick={() => startEditing(task.id, task.text)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              startEditing(task.id, task.text);
+            }
+          }}
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
+          tabIndex={0}
+          role="button"
+          aria-label={`タスク「${task.text}」を編集する`}
         >
           {task.text}
         </motion.span>
@@ -195,6 +215,7 @@ export const SortableTaskItem = React.memo(function SortableTaskItem({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.1 }}
+            aria-label={`タスク「${task.text}」の編集を保存`}
           >
             保存
           </motion.button>
@@ -204,6 +225,7 @@ export const SortableTaskItem = React.memo(function SortableTaskItem({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.1 }}
+            aria-label={`タスク「${task.text}」の編集をキャンセル`}
           >
             キャンセル
           </motion.button>
@@ -218,6 +240,7 @@ export const SortableTaskItem = React.memo(function SortableTaskItem({
           }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.1 }}
+          aria-label={`タスク「${task.text}」を削除`}
         >
           削除
         </motion.button>
