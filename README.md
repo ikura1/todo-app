@@ -23,7 +23,7 @@
 - **スタイリング**: Tailwind CSS
 - **アニメーション**: Framer Motion
 - **ドラッグ&ドロップ**: @dnd-kit
-- **テスト**: Jest + React Testing Library
+- **テスト**: Vitest + React Testing Library
 - **開発手法**: Test-Driven Development (TDD)
 
 ## 💻 開発環境のセットアップ

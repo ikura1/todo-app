@@ -1,27 +1,28 @@
+import { describe, test, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { DragAndDropTaskList } from './DragAndDropTaskList';
 import { Task } from '@/types/task';
 
 // Mock @dnd-kit/core
-jest.mock('@dnd-kit/core', () => ({
+vi.mock('@dnd-kit/core', () => ({
   DndContext: ({ children }: any) => <div data-testid="dnd-context">{children}</div>,
   DragOverlay: ({ children }: any) => <div data-testid="drag-overlay">{children}</div>,
-  closestCenter: jest.fn(),
-  KeyboardSensor: jest.fn(),
-  PointerSensor: jest.fn(),
-  useSensor: jest.fn(),
-  useSensors: jest.fn(() => []),
+  closestCenter: vi.fn(),
+  KeyboardSensor: vi.fn(),
+  PointerSensor: vi.fn(),
+  useSensor: vi.fn(),
+  useSensors: vi.fn(() => []),
 }));
 
 // Mock @dnd-kit/sortable
-jest.mock('@dnd-kit/sortable', () => ({
+vi.mock('@dnd-kit/sortable', () => ({
   SortableContext: ({ children }: any) => <div data-testid="sortable-context">{children}</div>,
-  sortableKeyboardCoordinates: jest.fn(),
-  verticalListSortingStrategy: jest.fn(),
+  sortableKeyboardCoordinates: vi.fn(),
+  verticalListSortingStrategy: vi.fn(),
 }));
 
 // Mock framer-motion
-jest.mock('framer-motion', () => ({
+vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, className, initial, animate, transition, ...props }: any) => (
       <div className={className} {...props}>{children}</div>
@@ -39,7 +40,7 @@ jest.mock('framer-motion', () => ({
 }));
 
 // Mock the SortableTaskItem component
-jest.mock('./SortableTaskItem', () => ({
+vi.mock('./SortableTaskItem', () => ({
   SortableTaskItem: ({ task, onToggleComplete, onDelete, onEdit }: any) => (
     <div data-testid={`sortable-task-${task.id}`}>
       <span>{task.text}</span>
@@ -81,14 +82,14 @@ describe('DragAndDropTaskList', () => {
 
   const mockProps = {
     tasks: mockTasks,
-    onToggleComplete: jest.fn(),
-    onDelete: jest.fn(),
-    onEdit: jest.fn(),
-    onTasksReorder: jest.fn(),
+    onToggleComplete: vi.fn(),
+    onDelete: vi.fn(),
+    onEdit: vi.fn(),
+    onTasksReorder: vi.fn(),
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders empty state when no tasks', () => {

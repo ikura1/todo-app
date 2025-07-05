@@ -1,9 +1,10 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TaskForm } from './TaskForm';
 
 describe('TaskForm', () => {
-  const mockOnSubmit = jest.fn();
+  const mockOnSubmit = vi.fn();
 
   beforeEach(() => {
     mockOnSubmit.mockClear();

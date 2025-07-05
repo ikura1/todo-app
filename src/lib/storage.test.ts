@@ -1,13 +1,14 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { saveTasksToStorage, loadTasksFromStorage, STORAGE_KEY } from './storage';
 import { createTask } from './task';
 import { Task } from '@/types/task';
 
 // localStorage のモック
 const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
 };
 
 // global オブジェクトに localStorage を設定

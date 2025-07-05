@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useTaskEdit } from './useTaskEdit';
 
@@ -53,7 +54,7 @@ describe('useTaskEdit', () => {
   });
 
   test('should save editing with callback', () => {
-    const mockOnSave = jest.fn();
+    const mockOnSave = vi.fn();
     const { result } = renderHook(() => useTaskEdit());
     
     act(() => {
@@ -75,7 +76,7 @@ describe('useTaskEdit', () => {
   });
 
   test('should not save if text is empty', () => {
-    const mockOnSave = jest.fn();
+    const mockOnSave = vi.fn();
     const { result } = renderHook(() => useTaskEdit());
     
     act(() => {

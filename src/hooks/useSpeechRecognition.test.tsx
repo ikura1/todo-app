@@ -1,3 +1,4 @@
+import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useSpeechRecognition } from './useSpeechRecognition';
 
@@ -6,14 +7,14 @@ const mockSpeechRecognition = {
   continuous: false,
   interimResults: false,
   lang: '',
-  start: jest.fn(),
-  stop: jest.fn(),
-  abort: jest.fn(),
-  addEventListener: jest.fn(),
-  removeEventListener: jest.fn(),
+  start: vi.fn(),
+  stop: vi.fn(),
+  abort: vi.fn(),
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
 };
 
-const mockSpeechRecognitionClass = jest.fn(() => mockSpeechRecognition);
+const mockSpeechRecognitionClass = vi.fn(() => mockSpeechRecognition);
 
 describe('useSpeechRecognition', () => {
   let originalWindow: any;
@@ -29,7 +30,7 @@ describe('useSpeechRecognition', () => {
       configurable: true,
     });
 
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterEach(() => {

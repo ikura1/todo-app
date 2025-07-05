@@ -1,11 +1,12 @@
+import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { usePWA } from './usePWA';
 
 // Create a more comprehensive mock for testing
 const createMockEnvironment = () => {
-  const mockMatchMedia = jest.fn(() => ({ matches: false }));
+  const mockMatchMedia = vi.fn(() => ({ matches: false }));
   const mockServiceWorker = {
-    register: jest.fn().mockResolvedValue({ scope: '/' }),
+    register: vi.fn().mockResolvedValue({ scope: '/' }),
   };
   const mockNavigator = {
     onLine: true,
@@ -14,11 +15,11 @@ const createMockEnvironment = () => {
   
   const eventListeners: { [key: string]: Function[] } = {};
   const mockWindow = {
-    addEventListener: jest.fn((event: string, handler: Function) => {
+    addEventListener: vi.fn((event: string, handler: Function) => {
       if (!eventListeners[event]) eventListeners[event] = [];
       eventListeners[event].push(handler);
     }),
-    removeEventListener: jest.fn((event: string, handler: Function) => {
+    removeEventListener: vi.fn((event: string, handler: Function) => {
       if (eventListeners[event]) {
         const index = eventListeners[event].indexOf(handler);
         if (index > -1) eventListeners[event].splice(index, 1);
@@ -58,7 +59,7 @@ describe('usePWA', () => {
     // Mock window functions
     global.window = mockEnv.mockWindow as any;
     
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
@@ -115,8 +116,8 @@ describe('usePWA', () => {
     const { result } = renderHook(() => usePWA());
     
     const mockEvent = {
-      preventDefault: jest.fn(),
-      prompt: jest.fn(),
+      preventDefault: vi.fn(),
+      prompt: vi.fn(),
       userChoice: Promise.resolve({ outcome: 'accepted', platform: 'web' }),
     };
     
@@ -134,7 +135,7 @@ describe('usePWA', () => {
     
     // First set up an install prompt
     const mockEvent = {
-      preventDefault: jest.fn(),
+      preventDefault: vi.fn(),
     };
     
     act(() => {
@@ -171,8 +172,8 @@ describe('usePWA', () => {
     const { result } = renderHook(() => usePWA());
     
     const mockEvent = {
-      preventDefault: jest.fn(),
-      prompt: jest.fn().mockResolvedValue(undefined),
+      preventDefault: vi.fn(),
+      prompt: vi.fn().mockResolvedValue(undefined),
       userChoice: Promise.resolve({ outcome: 'accepted', platform: 'web' }),
     };
     
@@ -196,8 +197,8 @@ describe('usePWA', () => {
     const { result } = renderHook(() => usePWA());
     
     const mockEvent = {
-      preventDefault: jest.fn(),
-      prompt: jest.fn().mockResolvedValue(undefined),
+      preventDefault: vi.fn(),
+      prompt: vi.fn().mockResolvedValue(undefined),
       userChoice: Promise.resolve({ outcome: 'dismissed', platform: 'web' }),
     };
     
@@ -228,7 +229,7 @@ describe('usePWA', () => {
   });
 
   test('should handle service worker registration failure gracefully', () => {
-    const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     mockEnv.mockServiceWorker.register.mockRejectedValue(new Error('Registration failed'));
     
     renderHook(() => usePWA());

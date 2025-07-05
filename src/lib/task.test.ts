@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from 'vitest';
 import { createTask, validateTask, toggleTaskComplete, updateTask } from './task';
 import { Task } from '@/types/task';
 

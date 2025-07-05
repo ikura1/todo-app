@@ -1,3 +1,4 @@
+import { describe, test, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { VoiceInputButton } from './VoiceInputButton';
 
@@ -7,17 +8,17 @@ const mockUseSpeechRecognition = {
   isSupported: true,
   transcript: '',
   error: null,
-  startListening: jest.fn(),
-  stopListening: jest.fn(),
-  resetTranscript: jest.fn(),
+  startListening: vi.fn(),
+  stopListening: vi.fn(),
+  resetTranscript: vi.fn(),
 };
 
-jest.mock('../hooks/useSpeechRecognition', () => ({
+vi.mock('../hooks/useSpeechRecognition', () => ({
   useSpeechRecognition: () => mockUseSpeechRecognition,
 }));
 
 // Mock framer-motion
-jest.mock('framer-motion', () => ({
+vi.mock('framer-motion', () => ({
   motion: {
     button: ({ children, className, onClick, disabled, ...props }: any) => (
       <button className={className} onClick={onClick} disabled={disabled} {...props}>
@@ -38,10 +39,10 @@ jest.mock('framer-motion', () => ({
 }));
 
 describe('VoiceInputButton', () => {
-  const mockOnTranscript = jest.fn();
+  const mockOnTranscript = vi.fn();
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUseSpeechRecognition.isListening = false;
     mockUseSpeechRecognition.isSupported = true;
     mockUseSpeechRecognition.transcript = '';

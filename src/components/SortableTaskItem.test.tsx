@@ -1,13 +1,14 @@
+import { describe, test, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { SortableTaskItem } from './SortableTaskItem';
 import { Task } from '@/types/task';
 
 // Mock @dnd-kit/sortable
-jest.mock('@dnd-kit/sortable', () => ({
+vi.mock('@dnd-kit/sortable', () => ({
   useSortable: () => ({
     attributes: {},
     listeners: {},
-    setNodeRef: jest.fn(),
+    setNodeRef: vi.fn(),
     transform: null,
     transition: null,
     isDragging: false,
@@ -15,16 +16,16 @@ jest.mock('@dnd-kit/sortable', () => ({
 }));
 
 // Mock @dnd-kit/utilities
-jest.mock('@dnd-kit/utilities', () => ({
+vi.mock('@dnd-kit/utilities', () => ({
   CSS: {
     Transform: {
-      toString: jest.fn(() => ''),
+      toString: vi.fn(() => ''),
     },
   },
 }));
 
 // Mock framer-motion
-jest.mock('framer-motion', () => ({
+vi.mock('framer-motion', () => ({
   motion: {
     li: ({ children, className, ...props }: any) => (
       <li className={className} {...props}>{children}</li>
@@ -57,13 +58,13 @@ describe('SortableTaskItem', () => {
   const mockProps = {
     task: mockTask,
     index: 0,
-    onToggleComplete: jest.fn(),
-    onDelete: jest.fn(),
-    onEdit: jest.fn(),
+    onToggleComplete: vi.fn(),
+    onDelete: vi.fn(),
+    onEdit: vi.fn(),
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders task correctly', () => {

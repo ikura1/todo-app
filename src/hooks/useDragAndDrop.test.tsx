@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useDragAndDrop } from './useDragAndDrop';
 import { Task } from '@/types/task';
@@ -17,7 +18,7 @@ describe('useDragAndDrop', () => {
   });
 
   test('should handle drag end with reordering', () => {
-    const mockOnTasksChange = jest.fn();
+    const mockOnTasksChange = vi.fn();
     const { result } = renderHook(() => useDragAndDrop(mockTasks, mockOnTasksChange));
     
     const dragEndEvent = {
@@ -39,7 +40,7 @@ describe('useDragAndDrop', () => {
   });
 
   test('should not reorder if dropped on same position', () => {
-    const mockOnTasksChange = jest.fn();
+    const mockOnTasksChange = vi.fn();
     const { result } = renderHook(() => useDragAndDrop(mockTasks, mockOnTasksChange));
     
     const dragEndEvent = {
@@ -55,7 +56,7 @@ describe('useDragAndDrop', () => {
   });
 
   test('should not reorder if no drop target', () => {
-    const mockOnTasksChange = jest.fn();
+    const mockOnTasksChange = vi.fn();
     const { result } = renderHook(() => useDragAndDrop(mockTasks, mockOnTasksChange));
     
     const dragEndEvent = {
@@ -113,19 +114,19 @@ describe('useDragAndDrop', () => {
     const { result, rerender } = renderHook(
       (props) => useDragAndDrop(props.tasks, props.onTasksChange),
       {
-        initialProps: { tasks: mockTasks, onTasksChange: jest.fn() }
+        initialProps: { tasks: mockTasks, onTasksChange: vi.fn() }
       }
     );
     
     const newTasks = [createTask('新しいタスク')];
     
-    rerender({ tasks: newTasks, onTasksChange: jest.fn() });
+    rerender({ tasks: newTasks, onTasksChange: vi.fn() });
     
     expect(result.current.tasks).toEqual(newTasks);
   });
 
   test('should correctly reorder tasks from different positions', () => {
-    const mockOnTasksChange = jest.fn();
+    const mockOnTasksChange = vi.fn();
     const { result } = renderHook(() => useDragAndDrop(mockTasks, mockOnTasksChange));
     
     // Move first task to middle

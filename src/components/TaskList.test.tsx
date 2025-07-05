@@ -1,10 +1,11 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TaskList } from './TaskList';
 import { Task } from '@/types/task';
 
 // Mock framer-motion
-jest.mock('framer-motion', () => ({
+vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, whileHover, whileTap, initial, animate, exit, transition, layout, ...props }: any) => <div {...props}>{children}</div>,
     li: ({ children, whileHover, whileTap, initial, animate, exit, transition, layout, ...props }: any) => <li {...props}>{children}</li>,
@@ -18,9 +19,9 @@ jest.mock('framer-motion', () => ({
 }));
 
 describe('TaskList', () => {
-  const mockOnToggleComplete = jest.fn();
-  const mockOnDelete = jest.fn();
-  const mockOnEdit = jest.fn();
+  const mockOnToggleComplete = vi.fn();
+  const mockOnDelete = vi.fn();
+  const mockOnEdit = vi.fn();
 
   const sampleTasks: Task[] = [
     {
