@@ -3,26 +3,47 @@ import { useState, useEffect } from 'react';
 interface UseDarkModeReturn {
   isDarkMode: boolean;
   toggleDarkMode: () => void;
+  isInitialized: boolean;
 }
 
 export function useDarkMode(): UseDarkModeReturn {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
+    // 初期化: localStorageまたはシステム設定から値を取得
     const storedTheme = localStorage.getItem('theme');
+    let initialDarkMode = false;
     
     if (storedTheme) {
-      const isDark = storedTheme === 'dark';
-      setIsDarkMode(isDark);
-      updateDocumentClass(isDark);
+      initialDarkMode = storedTheme === 'dark';
     } else {
       // システム設定を確認
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setIsDarkMode(prefersDark);
-      updateDocumentClass(prefersDark);
+      initialDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
+    
+    setIsDarkMode(initialDarkMode);
+    updateDocumentClass(initialDarkMode);
+    setIsInitialized(true);
+    
+    // メディアクエリの変更を監視
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      // ユーザーが手動で設定していない場合のみ、システム設定に従う
+      const currentStoredTheme = localStorage.getItem('theme');
+      if (!currentStoredTheme) {
+        setIsDarkMode(e.matches);
+        updateDocumentClass(e.matches);
+      }
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange);
+    };
   }, []);
 
   const updateDocumentClass = (isDark: boolean) => {
@@ -49,5 +70,6 @@ export function useDarkMode(): UseDarkModeReturn {
   return {
     isDarkMode,
     toggleDarkMode,
+    isInitialized,
   };
 }

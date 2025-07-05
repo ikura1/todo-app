@@ -4,7 +4,14 @@ import { motion } from 'framer-motion';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 export function DarkModeToggle() {
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { isDarkMode, toggleDarkMode, isInitialized } = useDarkMode();
+  
+  // 初期化完了まで何も表示しない（ハイドレーション問題回避）
+  if (!isInitialized) {
+    return (
+      <div className="h-8 w-14 bg-gray-200 rounded-full animate-pulse"></div>
+    );
+  }
 
   return (
     <motion.button
