@@ -6,6 +6,7 @@ export interface TaskFilter {
   category?: string;
   searchText?: string;
   tags?: string[];
+  dueDateFilter?: 'overdue' | 'today' | 'thisWeek';
 }
 
 export function filterTasks(tasks: Task[], filter: TaskFilter): Task[] {
@@ -41,6 +42,37 @@ export function filterTasks(tasks: Task[], filter: TaskFilter): Task[] {
       if (!task.tags || !filter.tags.some(filterTag => task.tags!.includes(filterTag))) {
         return false;
       }
+    }
+
+    // 期限フィルター
+    if (filter.dueDateFilter && task.dueDate) {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const taskDueDate = new Date(task.dueDate);
+      const taskDueDateOnly = new Date(taskDueDate.getFullYear(), taskDueDate.getMonth(), taskDueDate.getDate());
+
+      switch (filter.dueDateFilter) {
+        case 'overdue':
+          if (taskDueDateOnly >= today || task.completed) {
+            return false;
+          }
+          break;
+        case 'today':
+          if (taskDueDateOnly > today) {
+            return false;
+          }
+          break;
+        case 'thisWeek':
+          const weekFromNow = new Date(today);
+          weekFromNow.setDate(today.getDate() + 7);
+          if (taskDueDateOnly > weekFromNow) {
+            return false;
+          }
+          break;
+      }
+    } else if (filter.dueDateFilter) {
+      // 期限フィルターが設定されているが、タスクに期限がない場合は除外
+      return false;
     }
 
     return true;
