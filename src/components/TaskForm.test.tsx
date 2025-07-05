@@ -26,7 +26,12 @@ describe('TaskForm', () => {
     await user.type(input, 'テストタスク');
     await user.click(button);
 
-    expect(mockOnSubmit).toHaveBeenCalledWith('テストタスク');
+    expect(mockOnSubmit).toHaveBeenCalledWith({
+      text: 'テストタスク',
+      priority: 'medium',
+      category: undefined,
+      dueDate: undefined,
+    });
   });
 
   it('should not call onSubmit when form is submitted with empty text', async () => {
@@ -61,7 +66,12 @@ describe('TaskForm', () => {
     await user.type(input, 'テストタスク');
     await user.keyboard('{Enter}');
 
-    expect(mockOnSubmit).toHaveBeenCalledWith('テストタスク');
+    expect(mockOnSubmit).toHaveBeenCalledWith({
+      text: 'テストタスク',
+      priority: 'medium',
+      category: undefined,
+      dueDate: undefined,
+    });
   });
 
   it('should show loading state when isLoading is true', () => {
