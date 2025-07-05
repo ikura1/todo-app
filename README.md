@@ -17,12 +17,46 @@
 
 ## 🛠 技術スタック
 
-- **フレームワーク**: Next.js 14 (App Router)
+- **フレームワーク**: Next.js 15 (App Router)
 - **言語**: TypeScript
+- **パッケージマネージャー**: pnpm
 - **スタイリング**: Tailwind CSS
 - **アニメーション**: Framer Motion
 - **ドラッグ&ドロップ**: @dnd-kit
 - **テスト**: Jest + React Testing Library
 - **開発手法**: Test-Driven Development (TDD)
+
+## 💻 開発環境のセットアップ
+
+### 必要な環境
+- Node.js 18以上
+- pnpm 10以上
+
+### インストールと起動
+
+```bash
+# リポジトリをクローン
+git clone https://github.com/ikura1/todo-app.git
+cd todo-app
+
+# 依存関係をインストール
+pnpm install
+
+# 開発サーバーを起動
+pnpm dev
+```
+
+### 利用可能なコマンド
+
+```bash
+pnpm dev          # 開発サーバーの起動
+pnpm build        # プロダクションビルド
+pnpm start        # プロダクションサーバーの起動
+pnpm lint         # ESLintの実行
+pnpm test         # テストの実行
+pnpm test:watch   # テストのウォッチモード
+pnpm test:coverage # カバレッジ付きテスト
+pnpm typecheck    # TypeScriptの型チェック
+```
 
 🤖 Generated with [Claude Code](https://claude.ai/code)
