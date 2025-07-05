@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { Task } from '@/types/task';
+import { useTaskEdit } from '@/hooks/useTaskEdit';
 
 interface TaskListProps {
   tasks: Task[];
@@ -10,7 +11,17 @@ interface TaskListProps {
   onEdit: (taskId: string, newText: string) => void;
 }
 
-export function TaskList({ tasks, onToggleComplete, onDelete }: TaskListProps) {
+export function TaskList({ tasks, onToggleComplete, onDelete, onEdit }: TaskListProps) {
+  const { 
+    editingTaskId, 
+    editingText, 
+    isEditing, 
+    startEditing, 
+    setEditingText, 
+    cancelEditing, 
+    saveEditing, 
+    isEditingTask 
+  } = useTaskEdit();
   if (tasks.length === 0) {
     return (
       <motion.div 
@@ -85,16 +96,40 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: TaskListProps) {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               />
-              <motion.span 
-                className={`flex-1 ${task.completed ? 'line-through text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-gray-100'}`}
-                animate={{
-                  opacity: task.completed ? 0.6 : 1,
-                  scale: task.completed ? 0.98 : 1,
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                {task.text}
-              </motion.span>
+              {isEditingTask(task.id) ? (
+                <motion.input
+                  type="text"
+                  value={editingText}
+                  onChange={(e) => setEditingText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      saveEditing(onEdit);
+                    } else if (e.key === 'Escape') {
+                      cancelEditing();
+                    }
+                  }}
+                  onBlur={() => saveEditing(onEdit)}
+                  className="flex-1 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autoFocus
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.2 }}
+                />
+              ) : (
+                <motion.span 
+                  className={`flex-1 cursor-pointer ${task.completed ? 'line-through text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-gray-100'}`}
+                  animate={{
+                    opacity: task.completed ? 0.6 : 1,
+                    scale: task.completed ? 0.98 : 1,
+                  }}
+                  transition={{ duration: 0.2 }}
+                  onClick={() => startEditing(task.id, task.text)}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                >
+                  {task.text}
+                </motion.span>
+              )}
               <motion.span 
                 className="text-xs text-gray-500 dark:text-gray-400"
                 initial={{ opacity: 0 }}
@@ -103,18 +138,41 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: TaskListProps) {
               >
                 {task.priority}
               </motion.span>
-              <motion.button
-                onClick={() => onDelete(task.id)}
-                className="px-3 py-1 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
-                whileHover={{ 
-                  scale: 1.05,
-                  backgroundColor: "#fef2f2"
-                }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.1 }}
-              >
-                削除
-              </motion.button>
+              {isEditingTask(task.id) ? (
+                <motion.div className="flex gap-2">
+                  <motion.button
+                    onClick={() => saveEditing(onEdit)}
+                    className="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ duration: 0.1 }}
+                  >
+                    保存
+                  </motion.button>
+                  <motion.button
+                    onClick={cancelEditing}
+                    className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 text-sm"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ duration: 0.1 }}
+                  >
+                    キャンセル
+                  </motion.button>
+                </motion.div>
+              ) : (
+                <motion.button
+                  onClick={() => onDelete(task.id)}
+                  className="px-3 py-1 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+                  whileHover={{ 
+                    scale: 1.05,
+                    backgroundColor: "#fef2f2"
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.1 }}
+                >
+                  削除
+                </motion.button>
+              )}
             </motion.li>
           ))}
         </AnimatePresence>
