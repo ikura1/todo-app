@@ -70,7 +70,7 @@ describe('SortableTaskItem', () => {
     render(<SortableTaskItem {...mockProps} />);
     
     expect(screen.getByText('テストタスク')).toBeInTheDocument();
-    expect(screen.getByText('high')).toBeInTheDocument();
+    expect(screen.getByText('🔥 高')).toBeInTheDocument();
     expect(screen.getByRole('checkbox')).toBeInTheDocument();
     expect(screen.getByText('削除')).toBeInTheDocument();
   });
