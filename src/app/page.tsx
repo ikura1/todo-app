@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { TaskForm } from '@/components/TaskForm';
 import { DragAndDropTaskList } from '@/components/DragAndDropTaskList';
 import { TaskFilter } from '@/components/TaskFilter';
+import { TaskSort, SortOption, SortDirection } from '@/components/TaskSort';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
 import { PWAInstallButton } from '@/components/PWAInstallButton';
 import { OfflineIndicator } from '@/components/OfflineIndicator';
@@ -13,6 +14,7 @@ import { DashboardButton } from '@/components/DashboardButton';
 import { createTask, toggleTaskComplete, updateTask } from '@/lib/task';
 import { saveTasksToStorage, loadTasksFromStorage } from '@/lib/storage';
 import { filterTasks, TaskFilter as TaskFilterType } from '@/lib/taskFilter';
+import { sortTasks } from '@/lib/taskSort';
 import { Task } from '@/types/task';
 
 export default function Home() {
@@ -20,6 +22,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState<TaskFilterType>({ status: 'all' });
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<SortOption>('createdAt');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
   // 初期化時にlocalStorageからタスクを読み込み
   useEffect(() => {
@@ -32,10 +36,11 @@ export default function Home() {
     saveTasksToStorage(tasks);
   }, [tasks]);
 
-  // フィルタリングされたタスク
-  const filteredTasks = useMemo(() => {
-    return filterTasks(tasks, filter);
-  }, [tasks, filter]);
+  // フィルタリング＆ソートされたタスク
+  const filteredAndSortedTasks = useMemo(() => {
+    const filtered = filterTasks(tasks, filter);
+    return sortTasks(filtered, sortBy, sortDirection);
+  }, [tasks, filter, sortBy, sortDirection]);
 
   // タスク数の統計
   const taskCounts = useMemo(() => {
@@ -46,39 +51,61 @@ export default function Home() {
     };
   }, [tasks]);
 
-  const handleSubmit = async (text: string) => {
+  // 利用可能なカテゴリ一覧
+  const availableCategories = useMemo(() => {
+    const categories = tasks
+      .map(task => task.category)
+      .filter((category): category is string => Boolean(category));
+    return Array.from(new Set(categories));
+  }, [tasks]);
+
+  const handleSubmit = useCallback(async (taskData: {
+    text: string;
+    priority: 'low' | 'medium' | 'high';
+    category?: string;
+    dueDate?: Date;
+  }) => {
     setIsLoading(true);
     try {
-      const newTask = createTask(text);
+      const newTask = createTask(taskData.text, {
+        priority: taskData.priority,
+        category: taskData.category,
+        dueDate: taskData.dueDate,
+      });
       setTasks(prev => [...prev, newTask]);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const handleToggleComplete = (taskId: string) => {
+  const handleToggleComplete = useCallback((taskId: string) => {
     setTasks(prev => 
       prev.map(task => 
         task.id === taskId ? toggleTaskComplete(task) : task
       )
     );
-  };
+  }, []);
 
-  const handleDelete = (taskId: string) => {
+  const handleDelete = useCallback((taskId: string) => {
     setTasks(prev => prev.filter(task => task.id !== taskId));
-  };
+  }, []);
 
-  const handleEdit = (taskId: string, newText: string) => {
+  const handleEdit = useCallback((taskId: string, newText: string) => {
     setTasks(prev => 
       prev.map(task => 
         task.id === taskId ? updateTask(task, { text: newText }) : task
       )
     );
-  };
+  }, []);
 
-  const handleTasksReorder = (reorderedTasks: Task[]) => {
+  const handleTasksReorder = useCallback((reorderedTasks: Task[]) => {
     setTasks(reorderedTasks);
-  };
+  }, []);
+
+  const handleSortChange = useCallback((newSortBy: SortOption, newDirection: SortDirection) => {
+    setSortBy(newSortBy);
+    setSortDirection(newDirection);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900 py-8 transition-colors duration-300">
@@ -136,10 +163,17 @@ export default function Home() {
           filter={filter}
           onFilterChange={setFilter}
           taskCounts={taskCounts}
+          availableCategories={availableCategories}
+        />
+
+        <TaskSort
+          sortBy={sortBy}
+          sortDirection={sortDirection}
+          onSortChange={handleSortChange}
         />
 
         <DragAndDropTaskList 
-          tasks={filteredTasks}
+          tasks={filteredAndSortedTasks}
           onToggleComplete={handleToggleComplete}
           onDelete={handleDelete}
           onEdit={handleEdit}
