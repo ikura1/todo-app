@@ -9,6 +9,8 @@ export function useDarkMode(): UseDarkModeReturn {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const storedTheme = localStorage.getItem('theme');
     
     if (storedTheme) {
@@ -24,6 +26,8 @@ export function useDarkMode(): UseDarkModeReturn {
   }, []);
 
   const updateDocumentClass = (isDark: boolean) => {
+    if (typeof document === 'undefined') return;
+    
     if (isDark) {
       document.documentElement.classList.add('dark');
     } else {
@@ -35,8 +39,10 @@ export function useDarkMode(): UseDarkModeReturn {
     const newDarkMode = !isDarkMode;
     setIsDarkMode(newDarkMode);
     
-    const theme = newDarkMode ? 'dark' : 'light';
-    localStorage.setItem('theme', theme);
+    if (typeof window !== 'undefined') {
+      const theme = newDarkMode ? 'dark' : 'light';
+      localStorage.setItem('theme', theme);
+    }
     updateDocumentClass(newDarkMode);
   };
 

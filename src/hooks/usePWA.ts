@@ -21,9 +21,11 @@ export function usePWA(): UsePWAReturn {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     // PWAインストール可能イベントのリスナー
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
