@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import { motion } from 'framer-motion';
+import { VoiceInputButton } from './VoiceInputButton';
 
 interface TaskFormProps {
   onSubmit: (text: string) => void;
@@ -22,10 +23,16 @@ export function TaskForm({ onSubmit, isLoading = false }: TaskFormProps) {
     setText('');
   };
 
+  const handleVoiceInput = (transcript: string) => {
+    if (transcript.trim()) {
+      setText(transcript.trim());
+    }
+  };
+
   return (
     <motion.form 
       onSubmit={handleSubmit} 
-      className="flex gap-2"
+      className="flex gap-2 items-center"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
@@ -77,6 +84,11 @@ export function TaskForm({ onSubmit, isLoading = false }: TaskFormProps) {
           {isLoading ? '追加中...' : '追加'}
         </motion.span>
       </motion.button>
+
+      <VoiceInputButton 
+        onTranscript={handleVoiceInput}
+        disabled={isLoading}
+      />
     </motion.form>
   );
 }
